@@ -3,7 +3,6 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 
 import authRoutes from './routes/auth.routes'
-import { timeStamp } from 'node:console';
 
 dotenv.config();
 

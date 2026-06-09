@@ -40,7 +40,8 @@ router.post('/register', async(req: Request, res: Response): Promise<void> =>{
 });
 
 //Post /api/auth/login
-router.post('login', async (req: Request, res: Response): Promise<void> => {
+router.post('/login', async (req: Request, res: Response): Promise<void> => {
+    console.log('Login route bereikt:', req.body)
     const { email, password } = req.body;
 
     if(!email || !password) {

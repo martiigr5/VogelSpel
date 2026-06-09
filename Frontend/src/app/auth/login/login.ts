@@ -1,9 +1,46 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-login',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './login.html',
-  styleUrl: './login.scss',
+  styleUrl: './login.scss'
 })
-export class Login {}
+export class Login {
+  email    = '';
+  password = '';
+  error    = '';
+  loading  = false;
+
+  constructor(private authService: AuthService, private router: Router) {}
+
+  onLogin(): void {
+    if (!this.email || !this.password) {
+      this.error = 'Vul je e-mail en wachtwoord in.';
+      return;
+    }
+
+    this.loading = true;
+    this.error   = '';
+
+    this.authService.login(this.email, this.password).subscribe({
+      next: (response) => {
+        this.loading = false;
+        if (response.user.role === 'teacher') {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.router.navigate(['/game']);
+        }
+      },
+      error: (err) => {
+        this.loading = false;
+        this.error = err.error?.error || 'Inloggen mislukt. Probeer opnieuw.';
+      }
+    });
+  }
+}

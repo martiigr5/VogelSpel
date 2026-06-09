@@ -1,1 +1,40 @@
-<p>login works!</p>
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="login-logo">🐦</div>
+    <h1>Vogelspel</h1>
+    <p class="subtitle">Log in om verder te spelen</p>
+
+    <div class="form-group">
+      <label for="email">E-mail</label>
+      <input
+        id="email"
+        type="email"
+        [(ngModel)]="email"
+        placeholder="jouw@email.nl"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Wachtwoord</label>
+      <input
+        id="password"
+        type="password"
+        [(ngModel)]="password"
+        placeholder="••••••••"
+        (keyup.enter)="onLogin()"
+      />
+    </div>
+
+    <div class="error-message" *ngIf="error">
+      {{ error }}
+    </div>
+
+    <button class="btn-primary" (click)="onLogin()" [disabled]="loading">
+      {{ loading ? 'Bezig...' : 'Inloggen' }}
+    </button>
+
+    <p class="register-link">
+      Nog geen account? <a routerLink="/register">Registreer hier</a>
+    </p>
+  </div>
+</div>
