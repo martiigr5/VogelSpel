@@ -1,1 +1,57 @@
-<p>register works!</p>
+<div class="register-wrapper">
+  <div class="register-card">
+    <div class="register-logo">🐦</div>
+    <h1>Account aanmaken</h1>
+    <p class="subtitle">Maak een account aan om te beginnen</p>
+
+    <div class="form-group">
+      <label for="username">Gebruikersnaam</label>
+      <input
+        id="username"
+        type="text"
+        [(ngModel)]="username"
+        placeholder="jouw naam"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="email">E-mail</label>
+      <input
+        id="email"
+        type="email"
+        [(ngModel)]="email"
+        placeholder="jouw@email.nl"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Wachtwoord</label>
+      <input
+        id="password"
+        type="password"
+        [(ngModel)]="password"
+        placeholder="••••••••"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="role">Ik ben een...</label>
+      <select id="role" [(ngModel)]="role">
+        <option value="student">Leerling</option>
+        <option value="teacher">Docent</option>
+      </select>
+    </div>
+
+    <div class="error-message" *ngIf="error">
+      {{ error }}
+    </div>
+
+    <button class="btn-primary" (click)="OnRegister()" [disabled]="loading">
+      {{ loading ? 'Bezig...' : 'Account aanmaken' }}
+    </button>
+
+    <p class="login-link">
+      Al een account? <a routerLink="/login">Log hier in</a>
+    </p>
+  </div>
+</div>
