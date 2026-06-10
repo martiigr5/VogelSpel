@@ -8,19 +8,19 @@
   </header>
 
   <main class="game-main">
-    @if (loading) {
+    @if (loading()) {
       <div class="loading">Laden...</div>
     }
 
-    @if (error) {
-      <div class="error-message">{{ error }}</div>
+    @if (error()) {
+      <div class="error-message">{{ error() }}</div>
     }
 
-    @if (!loading && !error && !currentLevel) {
+    @if (!loading() && !error() && !currentLevel()) {
       <div class="level-select">
         <h2>Kies een level</h2>
         <div class="levels-grid">
-          @for (level of levels; track level.id) {
+          @for (level of levels(); track level.id) {
             <div class="level-card" (click)="startLevel(level)">
               <div class="level-number">{{ level.level_number }}</div>
               <div class="level-info">
@@ -34,11 +34,11 @@
       </div>
     }
 
-    @if (!loading && currentLevel) {
+    @if (!loading() && currentLevel()) {
       <div class="level-active">
         <div class="level-header">
-          <h2>{{ currentLevel.level.title }}</h2>
-          <span class="level-badge">Niveau {{ currentLevel.level.level_number }}</span>
+          <h2>{{ currentLevel().level.title }}</h2>
+          <span class="level-badge">Niveau {{ currentLevel().level.level_number }}</span>
         </div>
         <p>Level geladen — opdrachten komen hier.</p>
       </div>

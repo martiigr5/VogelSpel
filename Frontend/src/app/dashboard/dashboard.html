@@ -10,21 +10,21 @@
   <main class="dashboard-main">
     <h2>Voortgang leerlingen</h2>
 
-    @if (loading) {
+    @if (loading()) {
       <div class="loading">Laden...</div>
     }
 
-    @if (error) {
-      <div class="error-message">{{ error }}</div>
+    @if (error()) {
+      <div class="error-message">{{ error() }}</div>
     }
 
-    @if (!loading && !error) {
+    @if (!loading() && !error()) {
       <div class="students-grid">
-        @if (groupedStudents.length === 0) {
+        @if (groupedStudents().length === 0) {
           <div class="empty">Nog geen leerlingen gevonden.</div>
         }
 
-        @for (student of groupedStudents; track student.id) {
+        @for (student of groupedStudents(); track student.id) {
           <div class="student-card">
             <div class="student-header">
               <div class="student-avatar">{{ student.username[0].toUpperCase() }}</div>

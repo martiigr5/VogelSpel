@@ -16,6 +16,7 @@ export class GameService {
   }
 
   getLevel(id: number): Observable<any> {
+    console.log('getLevels aangeroepen');
     return this.http.get<any>(`${this.apiUrl}/levels/${id}`);
   } 
 }
