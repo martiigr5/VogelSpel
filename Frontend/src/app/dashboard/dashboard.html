@@ -1,1 +1,59 @@
-<p>dashboard works!</p>
+<div class="dashboard-wrapper">
+  <header class="dashboard-header">
+    <div class="header-left">
+      <span class="logo">🐦</span>
+      <h1>Docentendashboard</h1>
+    </div>
+    <button class="btn-logout" (click)="logout()">Uitloggen</button>
+  </header>
+
+  <main class="dashboard-main">
+    <h2>Voortgang leerlingen</h2>
+
+    @if (loading) {
+      <div class="loading">Laden...</div>
+    }
+
+    @if (error) {
+      <div class="error-message">{{ error }}</div>
+    }
+
+    @if (!loading && !error) {
+      <div class="students-grid">
+        @if (groupedStudents.length === 0) {
+          <div class="empty">Nog geen leerlingen gevonden.</div>
+        }
+
+        @for (student of groupedStudents; track student.id) {
+          <div class="student-card">
+            <div class="student-header">
+              <div class="student-avatar">{{ student.username[0].toUpperCase() }}</div>
+              <div class="student-info">
+                <h3>{{ student.username }}</h3>
+                <p>{{ student.email }}</p>
+              </div>
+              <div class="student-score">{{ getScore(student.levels) }}</div>
+            </div>
+
+            @if (student.levels.length > 0) {
+              <div class="levels-list">
+                @for (level of student.levels; track level.level_number) {
+                  <div class="level-row">
+                    <span class="level-badge">Niveau {{ level.level_number }}</span>
+                    <span class="level-title">{{ level.level_title }}</span>
+                    <span class="level-correct">{{ level.correct || 0 }}/{{ level.answered || 0 }} goed</span>
+                    <span class="level-status" [class.completed]="level.completed">
+                      {{ level.completed ? '✅ Klaar' : '⏳ Bezig' }}
+                    </span>
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="no-levels">Nog niet gespeeld</div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </main>
+</div>

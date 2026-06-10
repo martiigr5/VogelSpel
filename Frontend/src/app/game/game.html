@@ -1,1 +1,47 @@
-<p>game works!</p>
+<div class="game-wrapper">
+  <header class="game-header">
+    <div class="header-left">
+      <span class="logo">🐦</span>
+      <h1>Vogelspel</h1>
+    </div>
+    <button class="btn-logout" (click)="logout()">Uitloggen</button>
+  </header>
+
+  <main class="game-main">
+    @if (loading) {
+      <div class="loading">Laden...</div>
+    }
+
+    @if (error) {
+      <div class="error-message">{{ error }}</div>
+    }
+
+    @if (!loading && !error && !currentLevel) {
+      <div class="level-select">
+        <h2>Kies een level</h2>
+        <div class="levels-grid">
+          @for (level of levels; track level.id) {
+            <div class="level-card" (click)="startLevel(level)">
+              <div class="level-number">{{ level.level_number }}</div>
+              <div class="level-info">
+                <h3>{{ level.title }}</h3>
+                <p>{{ level.description }}</p>
+              </div>
+              <div class="level-arrow">→</div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    @if (!loading && currentLevel) {
+      <div class="level-active">
+        <div class="level-header">
+          <h2>{{ currentLevel.level.title }}</h2>
+          <span class="level-badge">Niveau {{ currentLevel.level.level_number }}</span>
+        </div>
+        <p>Level geladen — opdrachten komen hier.</p>
+      </div>
+    }
+  </main>
+</div>
