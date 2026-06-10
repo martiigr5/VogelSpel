@@ -34,7 +34,7 @@ export class Login {
         if (response.user.role === 'teacher') {
           this.router.navigate(['/dashboard']);
         } else {
-          this.router.navigate(['/game']);
+          this.router.navigate(['/menu']);
         }
       },
       error: (err) => {

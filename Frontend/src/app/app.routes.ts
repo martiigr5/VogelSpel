@@ -21,6 +21,11 @@ export const routes: Routes = [
     canActivate: [teacherGuard],
     loadComponent: () => import('./dashboard/dashboard').then(m => m.Dashboard)
   },
+  {
+    path: 'menu',
+    canActivate: [authGuard],
+    loadComponent: () => import('./menu/menu').then(m => m.Menu)
+  },
   { path: '**', redirectTo: '/login' }
 ];
  
