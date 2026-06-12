@@ -1,10 +1,13 @@
 <div class="game-wrapper">
   <header class="game-header">
-    <div class="header-left">
-      <span class="logo">🐦</span>
-      <h1>Vogelspel</h1>
+    <div class="user-info">
+      <span class="username">{{ gebruikersnaam }}</span>
+      <span class="klas">Klas: {{ klas }}</span>
     </div>
-    <button class="btn-logout" (click)="logout()">Uitloggen</button>
+    <button class="btn-terug" (click)="terugNaarMenu()">Terug</button>
+    <div class="logo">
+      <h1><span class="highlight">Het</span><span class="main">Vogelspel</span></h1>
+    </div>
   </header>
 
   <main class="game-main">
@@ -12,35 +15,20 @@
       <div class="loading">Laden...</div>
     }
 
-    @if (error()) {
-      <div class="error-message">{{ error() }}</div>
-    }
-
-    @if (!loading() && !error() && !currentLevel()) {
-      <div class="level-select">
-        <h2>Kies een level</h2>
-        <div class="levels-grid">
-          @for (level of levels(); track level.id) {
-            <div class="level-card" (click)="startLevel(level)">
-              <div class="level-number">{{ level.level_number }}</div>
-              <div class="level-info">
-                <h3>{{ level.title }}</h3>
-                <p>{{ level.description }}</p>
-              </div>
-              <div class="level-arrow">→</div>
+    @if (!loading()) {
+      <div class="levels-grid">
+        @for (level of levels(); track level.id) {
+          <div class="level-card" (click)="startLevel(level)">
+            <div class="level-top">
+              <span class="level-number">{{ level.level_number }}</span>
+              <span class="badge" [class]="getBadgeClass(level)">{{ getBadgeLabel(level) }}</span>
             </div>
-          }
-        </div>
-      </div>
-    }
-
-    @if (!loading() && currentLevel()) {
-      <div class="level-active">
-        <div class="level-header">
-          <h2>{{ currentLevel().level.title }}</h2>
-          <span class="level-badge">Niveau {{ currentLevel().level.level_number }}</span>
-        </div>
-        <p>Level geladen — opdrachten komen hier.</p>
+            <div class="level-info">
+              <h3>{{ getLevelNaam(level) }}</h3>
+              <p>{{ level.description }}</p>
+            </div>
+          </div>
+        }
       </div>
     }
   </main>

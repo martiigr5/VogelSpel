@@ -13,24 +13,40 @@ import { ProgressService } from "../shared/services/progress";
   styleUrl: './game.scss'
 })
 export class Game implements OnInit {
-  levels   = signal<any[]>([]);
-  loading  = signal(true);
-  error    = signal('');
-  currentLevel   = signal<any>(null);
-  currentSession = signal<any>(null);
+  levels         = signal<any[]>([]);
+  sessies        = signal<any[]>([]);
+  loading        = signal(true);
+  error          = signal('');
+  gebruikersnaam = '';
+  klas           = '';
 
   constructor(
     private http: HttpClient,
-    private progressService: ProgressService,
     private authService: AuthService,
+    private progressService: ProgressService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.authService.currentUser$.subscribe(user => {
+      if (user) {
+        const u = user as any;
+        this.gebruikersnaam = `${u.voornaam} ${u.achternaam}`;
+        this.klas = u.klas || '';
+      }
+    });
+
     this.http.get<any[]>('http://localhost:3000/api/game/levels').subscribe({
-      next: (data) => {
-        this.levels.set(data);
-        this.loading.set(false);
+      next: (levels) => {
+        this.levels.set(levels);
+        // Haal ook voortgang op
+        this.progressService.getMyProgress().subscribe({
+          next: (sessies) => {
+            this.sessies.set(sessies);
+            this.loading.set(false);
+          },
+          error: () => this.loading.set(false)
+        });
       },
       error: () => {
         this.error.set('Kon levels niet ophalen.');
@@ -39,13 +55,41 @@ export class Game implements OnInit {
     });
   }
 
+  getSessie(levelId: number): any {
+    return this.sessies().find(s => s.level_id === levelId);
+  }
+
+  getBadgeLabel(level: any): string {
+    const sessie = this.getSessie(level.id);
+    if (!sessie) return 'Nog starten';
+    if (sessie.completed) return 'Voltooid';
+    return 'Bezig';
+  }
+
+  getBadgeClass(level: any): string {
+    const sessie = this.getSessie(level.id);
+    if (!sessie) return 'badge-starten';
+    if (sessie.completed) return 'badge-voltooid';
+    return 'badge-bezig';
+  }
+
+  getLevelNaam(level: any): string {
+    const namen: any = {
+      1: 'Beginner',
+      2: 'Gemiddeld',
+      3: 'Moeilijk',
+      4: 'Toets'
+    };
+    return namen[level.level_number] || level.title;
+  }
+
   startLevel(level: any): void {
     if (level.level_number === 1) {
-      this.router.navigate(['./game/level1']);
+      this.router.navigate(['/game/level1']);
     }
   }
 
-  logout(): void {
-    this.authService.logout();
+  terugNaarMenu(): void {
+    this.router.navigate(['/menu']);
   }
 }

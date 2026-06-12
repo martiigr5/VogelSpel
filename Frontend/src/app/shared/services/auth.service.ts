@@ -6,7 +6,9 @@ import { environment } from "../../../environments/environment.development";
 
 export interface User {
     id: number;
-    username: string;
+    voornaam: string;
+    achternaam: string;
+    klas: string;
     email: string;
     role: 'student' | 'teacher';
 }
@@ -22,9 +24,9 @@ export class AuthService {
 
     constructor(private http: HttpClient, private router: Router) {}
 
-    register(username: string, email: string, password: string, role: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, { username, email, password, role });
-  }
+    register(voornaam: string, achternaam: string, klas: string, email: string, password: string, role: string): Observable<any> {
+  return this.http.post(`${this.apiUrl}/register`, { voornaam, achternaam, klas, email, password, role });
+}
  
   login(email: string, password: string): Observable<any> {
     return this.http.post<{ token: string; user: User }>(`${this.apiUrl}/login`, { email, password })

@@ -1,8 +1,13 @@
 <div class="level1-wrapper">
   <header class="level-header">
-    <button class="btn-terug" (click)="terugNaarMenu()">← Terug</button>
-    <h1>Niveau 1 — Klanken</h1>
-    <div class="score">⭐ {{ score() }}</div>
+    <div class="user-info">
+      <span class="username">{{ gebruikersnaam }}</span>
+      <span class="klas">Klas: {{ klas }}</span>
+    </div>
+    <button class="btn-terug" (click)="terugNaarMenu()">Terug</button>
+    <div class="logo">
+      <h1><span class="highlight">Het</span><span class="main">Vogelspel</span></h1>
+    </div>
   </header>
 
   @if (loading()) {
@@ -20,7 +25,7 @@
       </div>
     </div>
 
-    <div class="feedback" [class.goed]="feedbackType() === 'goed'" [class.fout]="feedbackType() === 'fout'" [class.info]="feedbackType() === 'info'">
+    <div class="feedback-balk" [class.goed]="feedbackType() === 'Goed'" [class.fout]="feedbackType() === 'Fout'" [class.info]="feedbackType() === 'info'">
       {{ feedback() }}
     </div>
 
@@ -35,7 +40,6 @@
             [style.width.px]="item.width"
             [style.height.px]="item.height"
             (click)="klikItem(item)"
-            [title]="isGevonden(item) ? item.name : '?'"
           >
             @if (isGevonden(item)) {
               <span class="item-naam">{{ item.name }}</span>
@@ -47,12 +51,20 @@
       </div>
     </div>
 
-    @if (levelKlaar()) {
-      <div class="level-klaar">
+    <footer class="game-footer">
+      <button class="footer-btn pauze">Pauze ⏱</button>
+      <button class="footer-btn help">Help ?</button>
+      <button class="footer-btn stoppen" (click)="terugNaarMenu()">Stoppen ⊖</button>
+    </footer>
+  }
+
+  @if (levelKlaar()) {
+    <div class="level-klaar-overlay">
+      <div class="level-klaar-card">
         <h2>🎉 Level voltooid!</h2>
         <p>Je hebt {{ score() }} voorwerpen gevonden!</p>
         <button class="btn-primary" (click)="terugNaarMenu()">Terug naar menu</button>
       </div>
-    }
+    </div>
   }
 </div>

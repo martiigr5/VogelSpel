@@ -1,30 +1,35 @@
-<div class ="menu-wrapper">
-    <div class="menu-card">
-        <div class="menu-logo">🐦
-            <h1>Vogelspel</h1>
-            <p class="menu-subtitle">Vind de verdwenen vogel!</p>
-
-            <div class="menu-buttons">
-                <button class="menu-btn secondary" (click)="newGame()">
-                    <span class="btn-icon">🎮</span>
-                    Nieuw Spel
-                </button>
-
-                <button class="menu-btn secondary" (click)="loadGame()">
-                    <span class="btn-icon">💾</span>
-                    Spel Laden
-                </button>
-
-                <button class="menu-btn secondary disabled" disabled>
-                    <span class="btn-icon">⚙️</span>
-                    Opties
-                </button>
-
-                <button class="menu-btn danger" (click)="logout()">
-                    <span class="btn-icon">🚪</span>
-                    Uitloggen
-                </button>
-            </div>
-        </div>
+<div class="menu-wrapper">
+  <header class="menu-header">
+    <div class="user-info">
+      <span class="username">{{ gebruikersnaam }}</span>
+      <span class="klas">Klas: {{ klas }}</span>
     </div>
+    <div class="logo">
+      <h1><span class="highlight">Het</span><span class="main">Vogelspel</span></h1>
+    </div>
+  </header>
+
+  <main class="menu-main">
+    <div class="menu-grid">
+      <button class="menu-btn" (click)="newGame()">
+        <span class="btn-label">Nieuw spel</span>
+        <span class="btn-icon">🎮</span>
+      </button>
+
+      <button class="menu-btn" (click)="loadGame()">
+        <span class="btn-label">Spel laden</span>
+        <span class="btn-icon">💾</span>
+      </button>
+
+      <button class="menu-btn" disabled>
+        <span class="btn-label">Opties</span>
+        <span class="btn-icon">⚙️</span>
+      </button>
+
+      <button class="menu-btn" (click)="logout()">
+        <span class="btn-label">Logout</span>
+        <span class="btn-icon">🚪</span>
+      </button>
+    </div>
+  </main>
 </div>

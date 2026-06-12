@@ -1,0 +1,45 @@
+<div class="laden-wrapper">
+  <header class="laden-header">
+    <div class="user-info">
+      <span class="username">{{ gebruikersnaam }}</span>
+      <span class="klas">Klas: {{ klas }}</span>
+    </div>
+    <button class="btn-terug" (click)="terugNaarMenu()">Terug</button>
+    <div class="logo">
+      <h1><span class="highlight">Het</span><span class="main">Vogelspel</span></h1>
+    </div>
+  </header>
+
+  <main class="laden-main">
+    @if (loading()) {
+      <div class="loading">Laden...</div>
+    }
+
+    @if (!loading() && sessies().length === 0) {
+      <div class="leeg">
+        <p>Geen opgeslagen spellen gevonden.</p>
+        <button class="btn-primary" (click)="terugNaarMenu()">Terug naar menu</button>
+      </div>
+    }
+
+    @if (!loading() && sessies().length > 0) {
+      <div class="sessies-lijst">
+        @for (sessie of sessies(); track sessie.level_id) {
+          <div class="sessie-kaart" (click)="laadSessie(sessie)">
+            <div class="sessie-links">
+              <div class="sessie-nummer">{{ sessie.level_number }}</div>
+              <div class="sessie-info">
+                <h3>{{ sessie.level_title }}</h3>
+                <p>{{ formatDatum(sessie.last_active) }}</p>
+                <div class="voortgang-balk">
+                  <div class="voortgang-fill" [style.width.%]="getVoortgang(sessie)"></div>
+                </div>
+              </div>
+            </div>
+            <button class="btn-verwijder" (click)="verwijderSessie(sessie, $event)">🗑</button>
+          </div>
+        }
+      </div>
+    }
+  </main>
+</div>

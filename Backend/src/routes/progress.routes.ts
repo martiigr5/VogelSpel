@@ -1,6 +1,7 @@
 import { Router, Response } from 'express';
 import pool from '../db/pool';
 import { authenticateToken, requireTeacher, AuthRequest } from '../middleware/auth.middleware';
+import { promises } from 'dns';
 
 const router = Router();
 
@@ -76,6 +77,38 @@ router.post('/collect', authenticateToken, async (req: AuthRequest, res: Respons
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Item verzamelen mislukt' });
+  }
+});
+
+// POST /api/progress/complete — level voltooien
+router.post('/complete', authenticateToken, async (req: AuthRequest, res: Response): Promise<void> => {
+  const { session_id } = req.body;
+
+  try {
+    const result = await pool.query(
+      `UPDATE sessions SET completed = TRUE, completed_at = NOW() WHERE id = $1 RETURNING *`,
+      [session_id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Voltooien mislukt' });
+  }
+});
+
+router.delete('/session/:levelId', authenticateToken, async (req: AuthRequest, res: Response): Promise<void> => {
+  const user_id = req.user!.id;
+  const level_id = parseInt(req.params.levelId);
+
+  try {
+    await pool.query(
+      'DELETE FROM sessions WHERE user_id = $1 AND level_id = $2',
+      [user_id, level_id]
+    );
+    res.json({ message: 'Sessie verwijderd' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Verwijderen mislukt' });
   }
 });
 

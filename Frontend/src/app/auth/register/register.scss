@@ -1,49 +1,71 @@
 .register-wrapper {
   min-height: 100vh;
+  background: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+  padding: 1rem;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 .register-card {
   background: white;
-  border-radius: 20px;
-  padding: 2.5rem;
   width: 100%;
-  max-width: 400px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  max-width: 480px;
+  padding: 2.5rem 3rem;
+  border-radius: 4px;
 }
 
-.register-logo { font-size: 3rem; margin-bottom: 0.5rem; }
+.login-title {
+  text-align: center;
+  margin-bottom: 2rem;
 
-h1 { font-size: 1.8rem; color: #1a237e; margin: 0 0 0.25rem; }
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #3D1C00;
+    line-height: 1.1;
 
-.subtitle { color: #666; margin-bottom: 2rem; font-size: 0.95rem; }
+    .highlight {
+      background: #F5A623;
+      padding: 0 0.3rem;
+      display: inline-block;
+    }
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+
+  .form-group { flex: 1; }
+}
 
 .form-group {
-  text-align: left;
   margin-bottom: 1.25rem;
 
-  label { display: block; font-weight: 600; color: #333; margin-bottom: 0.4rem; font-size: 0.9rem; }
+  label {
+    display: block;
+    font-size: 0.8rem;
+    color: #333;
+    margin-bottom: 0.3rem;
+  }
 
-  input, select {
+  input {
     width: 100%;
-    padding: 0.75rem 1rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
+    padding: 0.65rem 0.75rem;
+    border: 1.5px solid #ccc;
+    border-radius: 4px;
     font-size: 1rem;
     box-sizing: border-box;
-    background: white;
-    &:focus { outline: none; border-color: #42a5f5; }
+    &:focus { outline: none; border-color: #F5A623; }
   }
 }
 
 .error-message {
   background: #ffebee;
   color: #c62828;
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 0.75rem;
   margin-bottom: 1rem;
   font-size: 0.9rem;
@@ -52,20 +74,27 @@ h1 { font-size: 1.8rem; color: #1a237e; margin: 0 0 0.25rem; }
 .btn-primary {
   width: 100%;
   padding: 0.85rem;
-  background: #1a237e;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 600;
+  background: white;
+  color: #3D1C00;
+  border: 2px solid #3D1C00;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: 700;
   cursor: pointer;
-  &:hover:not(:disabled) { background: #283593; }
+  &:hover:not(:disabled) { background: #FFCC99; }
   &:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 
 .login-link {
-  margin-top: 1.25rem;
-  color: #666;
-  font-size: 0.9rem;
-  a { color: #1a237e; font-weight: 600; text-decoration: none; }
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #555;
+
+  a {
+    color: #F5A623;
+    font-weight: 600;
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+  }
 }

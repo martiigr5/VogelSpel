@@ -7,36 +7,35 @@ const router = Router();
 
 //POST /api/auth/register
 router.post('/register', async(req: Request, res: Response): Promise<void> =>{
-    const {username, email, password, role } = req.body;
+    const { voornaam, achternaam, klas, email, password, role } = req.body;
 
-    if(!username || !email || !password) {
+    if(!voornaam || !achternaam || !email || !password) {
         res.status(400).json({ error: 'Vul alle velden in'});
         return;
     }
 
-    const allowdRoles = ['student', 'teacher'];
-    const userRole = allowdRoles.includes(role) ? role : 'student';
+    const allowedRoles = ['student', 'teacher'];
+    const userRole = allowedRoles.includes(role) ? role : 'student';
 
     try {
         const password_hash = await bcrypt.hash(password, 10);
 
         const result = await pool.query(
-            `INSERT INTO users (username, email, password_hash, role)
-            VALUES ($1, $2, $3, $4)
-            RETURNING id, username, email, role, created_at`,
-            [username, email, password_hash, userRole]
+            `INSERT INTO users (voornaam, achternaam, klas, email, password_hash, role)
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING id, voornaam, achternaam, klas, email, role, created_at`,
+            [voornaam, achternaam, klas, email, password_hash, userRole]
         );
 
         res.status(201).json({ user: result.rows[0] });
-    } catch (err: any ) {
+    } catch (err: any) {
         if (err.code === '23505'){
-            res.status(409).json({ error: 'Gebruikersnaam of e-mail bestaat al'});
-        }else{
+            res.status(409).json({ error: 'E-mail bestaat al'});
+        } else {
             console.error(err);
             res.status(500).json({ error: 'Registratie mislukt'});
         }
     }
-
 });
 
 //Post /api/auth/login
@@ -76,14 +75,16 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
         );
 
         res.json({
-            token,
-            user: {
-                id: user.id,
-                username: user.username,
-                email: user.email,
-                role: user.role,
-            },
-        });
+    token,
+    user: {
+        id:         user.id,
+        voornaam:   user.voornaam,
+        achternaam: user.achternaam,
+        klas:       user.klas,
+        email:      user.email,
+        role:       user.role,
+    },
+});
     }catch(err){
         console.error(err);
         res.status(500).json({ error: 'Inloggen is mislukt'});
