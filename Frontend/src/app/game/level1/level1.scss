@@ -1,0 +1,176 @@
+.level1-wrapper {
+  min-height: 100vh;
+  background: #f0f8ff;
+  display: flex;
+  flex-direction: column;
+}
+
+.level-header {
+  background: #1a237e;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  h1 { margin: 0; font-size: 1.2rem; }
+}
+
+.btn-terug {
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  &:hover { background: rgba(255,255,255,0.25); }
+}
+
+.score {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.klank-banner {
+  text-align: center;
+  padding: 1.5rem;
+  background: white;
+  border-bottom: 2px solid #e0e0e0;
+
+  p { margin: 0 0 0.5rem; color: #555; }
+}
+
+.klank-tonen {
+  font-size: 4rem;
+  font-weight: 900;
+  color: #1a237e;
+  line-height: 1;
+  margin-bottom: 0.75rem;
+}
+
+.voortgang {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.klank-dot {
+  background: #e0e0e0;
+  color: #666;
+  border-radius: 20px;
+  padding: 0.25rem 0.75rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+
+  &.actief {
+    background: #1a237e;
+    color: white;
+  }
+}
+
+.feedback {
+  text-align: center;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  min-height: 44px;
+
+  &.goed { color: #2e7d32; background: #e8f5e9; }
+  &.fout { color: #c62828; background: #ffebee; }
+  &.info { color: #1565c0; background: #e3f2fd; }
+}
+
+.scene-wrapper {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.scene {
+  position: relative;
+  width: 900px;
+  height: 550px;
+  background: #c8e6c9;
+  border-radius: 16px;
+  border: 3px solid #a5d6a7;
+  background-image:
+    radial-gradient(circle at 20% 50%, #81c784 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, #aed581 0%, transparent 40%),
+    radial-gradient(circle at 60% 80%, #66bb6a 0%, transparent 35%);
+}
+
+.hotspot {
+  position: absolute;
+  border-radius: 12px;
+  border: 3px dashed rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  backdrop-filter: blur(2px);
+
+  &:hover {
+    background: rgba(255,255,255,0.4);
+    border-color: white;
+    transform: scale(1.05);
+  }
+
+  &.gevonden {
+    background: rgba(46, 125, 50, 0.7);
+    border: 3px solid #2e7d32;
+    cursor: default;
+    &:hover { transform: none; }
+  }
+}
+
+.item-verborgen {
+  font-size: 1.5rem;
+  color: rgba(255,255,255,0.8);
+  font-weight: 700;
+}
+
+.item-naam {
+  font-size: 0.8rem;
+  color: white;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.25rem;
+}
+
+.level-klaar {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+
+  h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+  p  { font-size: 1.2rem; margin-bottom: 2rem; }
+}
+
+.btn-primary {
+  background: #1a237e;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover { background: #283593; }
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}

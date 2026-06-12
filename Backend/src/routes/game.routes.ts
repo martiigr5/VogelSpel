@@ -23,7 +23,7 @@ router.get('/levels/:id', authenticateToken, async (req: AuthRequest, res: Respo
 
     try{
         const levelResult = await pool.query(
-            'SELECT * FROM levels WHERE id = $1'
+            'SELECT * FROM levels WHERE id = $1',
             [levelId]
         );
 
@@ -53,7 +53,7 @@ router.get('/levels/:id', authenticateToken, async (req: AuthRequest, res: Respo
         );
 
         const itemsResult = await pool.query(
-            'SELECT * FROM inventory_items WHERE level_id = $1'
+            'SELECT * FROM inventory_items WHERE level_id = $1',
             [levelId]
         );
 

@@ -17,6 +17,11 @@ export const routes: Routes = [
     loadComponent: () => import('./game/game').then(m => m.Game)
   },
   {
+    path: 'game/level1',
+    canActivate: [authGuard],
+    loadComponent: () => import('./game/level1/level1').then(m => m.Level1)
+  },
+  {
     path: 'dashboard',
     canActivate: [teacherGuard],
     loadComponent: () => import('./dashboard/dashboard').then(m => m.Dashboard)

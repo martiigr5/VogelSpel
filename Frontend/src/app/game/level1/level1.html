@@ -1,0 +1,58 @@
+<div class="level1-wrapper">
+  <header class="level-header">
+    <button class="btn-terug" (click)="terugNaarMenu()">← Terug</button>
+    <h1>Niveau 1 — Klanken</h1>
+    <div class="score">⭐ {{ score() }}</div>
+  </header>
+
+  @if (loading()) {
+    <div class="loading">Laden...</div>
+  }
+
+  @if (!loading()) {
+    <div class="klank-banner">
+      <p>Zoek alle voorwerpen met de klank:</p>
+      <div class="klank-tonen">{{ currentKlank().toUpperCase() }}</div>
+      <div class="voortgang">
+        @for (k of klanken; track k) {
+          <span class="klank-dot" [class.actief]="k === currentKlank()">{{ k }}</span>
+        }
+      </div>
+    </div>
+
+    <div class="feedback" [class.goed]="feedbackType() === 'goed'" [class.fout]="feedbackType() === 'fout'" [class.info]="feedbackType() === 'info'">
+      {{ feedback() }}
+    </div>
+
+    <div class="scene-wrapper">
+      <div class="scene">
+        @for (item of items(); track item.id) {
+          <div
+            class="hotspot"
+            [class.gevonden]="isGevonden(item)"
+            [style.left.px]="item.position_x"
+            [style.top.px]="item.position_y"
+            [style.width.px]="item.width"
+            [style.height.px]="item.height"
+            (click)="klikItem(item)"
+            [title]="isGevonden(item) ? item.name : '?'"
+          >
+            @if (isGevonden(item)) {
+              <span class="item-naam">{{ item.name }}</span>
+            } @else {
+              <span class="item-verborgen">?</span>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    @if (levelKlaar()) {
+      <div class="level-klaar">
+        <h2>🎉 Level voltooid!</h2>
+        <p>Je hebt {{ score() }} voorwerpen gevonden!</p>
+        <button class="btn-primary" (click)="terugNaarMenu()">Terug naar menu</button>
+      </div>
+    }
+  }
+</div>

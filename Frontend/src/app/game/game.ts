@@ -40,22 +40,9 @@ export class Game implements OnInit {
   }
 
   startLevel(level: any): void {
-    this.loading.set(true);
-    this.progressService.startSession(level.id).subscribe({
-      next: (session) => {
-        this.currentSession.set(session);
-        this.http.get<any>(`http://localhost:3000/api/game/levels/${level.id}`).subscribe({
-          next: (levelData) => {
-            this.currentLevel.set(levelData);
-            this.loading.set(false);
-          }
-        });
-      },
-      error: () => {
-        this.error.set('Kon level niet starten.');
-        this.loading.set(false);
-      }
-    });
+    if (level.level_number === 1) {
+      this.router.navigate(['./game/level1']);
+    }
   }
 
   logout(): void {
