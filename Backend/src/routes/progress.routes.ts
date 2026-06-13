@@ -14,8 +14,6 @@ router.post('/session', authenticateToken, async (req: AuthRequest, res: Respons
     const result = await pool.query(
       `INSERT INTO sessions (user_id, level_id)
        VALUES ($1, $2)
-       ON CONFLICT (user_id, level_id)
-       DO UPDATE SET last_active = NOW()
        RETURNING *`,
       [user_id, level_id]
     );
@@ -96,14 +94,14 @@ router.post('/complete', authenticateToken, async (req: AuthRequest, res: Respon
   }
 });
 
-router.delete('/session/:levelId', authenticateToken, async (req: AuthRequest, res: Response): Promise<void> => {
+router.delete('/session/:sessionId', authenticateToken, async (req: AuthRequest, res: Response): Promise<void> => {
   const user_id = req.user!.id;
-  const level_id = parseInt(req.params.levelId);
+  const session_id = parseInt(req.params.sessionId);
 
   try {
     await pool.query(
-      'DELETE FROM sessions WHERE user_id = $1 AND level_id = $2',
-      [user_id, level_id]
+      'DELETE FROM sessions WHERE id = $1 AND user_id = $2',
+      [session_id, user_id]
     );
     res.json({ message: 'Sessie verwijderd' });
   } catch (err) {
@@ -118,15 +116,16 @@ router.get('/me', authenticateToken, async (req: AuthRequest, res: Response): Pr
 
   try {
     const result = await pool.query(
-      `SELECT s.*, l.title AS level_title, l.level_number,
-        COUNT(p.id) AS answered,
-        SUM(CASE WHEN p.is_correct THEN 1 ELSE 0 END) AS correct
+      `SELECT DISTINCT ON (s.id) s.id, s.user_id, s.level_id, s.started_at, 
+        s.last_active, s.completed, s.completed_at,
+        l.title AS level_title, l.level_number,
+        COUNT(p.id) OVER (PARTITION BY s.id) AS answered,
+        SUM(CASE WHEN p.is_correct THEN 1 ELSE 0 END) OVER (PARTITION BY s.id) AS correct
        FROM sessions s
        JOIN levels l ON l.id = s.level_id
        LEFT JOIN progress p ON p.session_id = s.id
        WHERE s.user_id = $1
-       GROUP BY s.id, l.title, l.level_number
-       ORDER BY l.level_number`,
+       ORDER BY s.id, l.level_number`,
       [user_id]
     );
     res.json(result.rows);

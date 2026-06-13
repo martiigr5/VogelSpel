@@ -24,7 +24,7 @@
 
     @if (!loading() && sessies().length > 0) {
       <div class="sessies-lijst">
-        @for (sessie of sessies(); track sessie.level_id) {
+        @for (sessie of sessies(); track sessie.id) {
           <div class="sessie-kaart" (click)="laadSessie(sessie)">
             <div class="sessie-links">
               <div class="sessie-nummer">{{ sessie.level_number }}</div>

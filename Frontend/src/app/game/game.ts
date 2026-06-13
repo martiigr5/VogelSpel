@@ -14,7 +14,6 @@ import { ProgressService } from "../shared/services/progress";
 })
 export class Game implements OnInit {
   levels         = signal<any[]>([]);
-  sessies        = signal<any[]>([]);
   loading        = signal(true);
   error          = signal('');
   gebruikersnaam = '';
@@ -36,41 +35,16 @@ export class Game implements OnInit {
       }
     });
 
-    this.http.get<any[]>('http://localhost:3000/api/game/levels').subscribe({
-      next: (levels) => {
-        this.levels.set(levels);
-        // Haal ook voortgang op
-        this.progressService.getMyProgress().subscribe({
-          next: (sessies) => {
-            this.sessies.set(sessies);
-            this.loading.set(false);
-          },
-          error: () => this.loading.set(false)
-        });
-      },
-      error: () => {
-        this.error.set('Kon levels niet ophalen.');
-        this.loading.set(false);
-      }
-    });
-  }
-
-  getSessie(levelId: number): any {
-    return this.sessies().find(s => s.level_id === levelId);
-  }
-
-  getBadgeLabel(level: any): string {
-    const sessie = this.getSessie(level.id);
-    if (!sessie) return 'Nog starten';
-    if (sessie.completed) return 'Voltooid';
-    return 'Bezig';
-  }
-
-  getBadgeClass(level: any): string {
-    const sessie = this.getSessie(level.id);
-    if (!sessie) return 'badge-starten';
-    if (sessie.completed) return 'badge-voltooid';
-    return 'badge-bezig';
+  this.http.get<any[]>('http://localhost:3000/api/game/levels').subscribe({
+    next: (levels) => {
+      this.levels.set(levels);
+      this.loading.set(false);
+    },
+    error: () => {
+      this.error.set('Kon levels niet ophalen.');
+      this.loading.set(false);
+    }
+  });
   }
 
   getLevelNaam(level: any): string {
@@ -85,7 +59,7 @@ export class Game implements OnInit {
 
   startLevel(level: any): void {
     if (level.level_number === 1) {
-      this.router.navigate(['/game/level1']);
+      this.router.navigate(['/game/level1'], { queryParams: { nieuw: true } });
     }
   }
 

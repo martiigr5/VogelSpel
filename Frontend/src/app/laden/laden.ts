@@ -49,9 +49,9 @@ export class Laden implements OnInit {
 
   verwijderSessie(sessie: any, event: Event): void {
     event.stopPropagation();
-    this.http.delete(`http://localhost:3000/api/progress/session/${sessie.level_id}`).subscribe({
+    this.http.delete(`http://localhost:3000/api/progress/session/${sessie.id}`).subscribe({
       next: () => {
-        this.sessies.set(this.sessies().filter(s => s.level_id !== sessie.level_id));
+        this.sessies.set(this.sessies().filter(s => s.id !== sessie.id));
       }
     });
   }
