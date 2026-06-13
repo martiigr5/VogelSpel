@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import authRoutes     from './routes/auth.routes';
 import gameRoutes     from './routes/game.routes';
 import progressRoutes from './routes/progress.routes';
+import klasseRoutes from './routes/klassen.routes';
+import leerlingRoutes from './routes/leerling.routes';
 
 dotenv.config();
 
@@ -18,6 +20,8 @@ app.use(express.json());
 app.use('/api/auth',     authRoutes);
 app.use('/api/game',     gameRoutes);
 app.use('/api/progress', progressRoutes);
+app.use('/api/klassen', klasseRoutes);
+app.use('/api/leering', leerlingRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
