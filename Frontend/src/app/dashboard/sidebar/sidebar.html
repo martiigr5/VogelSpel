@@ -1,0 +1,14 @@
+<aside class="sidebar">
+  <div class="sidebar-user">{{ gebruikersnaam }}</div>
+
+  <nav class="sidebar-nav">
+    <a routerLink="/dashboard" routerLinkActive="actief" [routerLinkActiveOptions]="{exact: true}">Home</a>
+    <a routerLink="/dashboard/leerlingen" routerLinkActive="actief">Leerlingen</a>
+    <a routerLink="/dashboard/klassen" routerLinkActive="actief">Klassen</a>
+    <a routerLink="/dashboard/levels" routerLinkActive="actief">Levels</a>
+    <a routerLink="/dashboard/meldingen" routerLinkActive="actief">Meldingen</a>
+    <a routerLink="/dashboard/instellingen" routerLinkActive="actief">Instellingen</a>
+  </nav>
+
+  <button class="sidebar-logout" (click)="logout()">Logout</button>
+</aside>

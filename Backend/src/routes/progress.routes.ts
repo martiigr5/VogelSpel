@@ -116,16 +116,17 @@ router.get('/me', authenticateToken, async (req: AuthRequest, res: Response): Pr
 
   try {
     const result = await pool.query(
-      `SELECT DISTINCT ON (s.id) s.id, s.user_id, s.level_id, s.started_at, 
+      `SELECT s.id, s.user_id, s.level_id, s.started_at,
         s.last_active, s.completed, s.completed_at,
         l.title AS level_title, l.level_number,
-        COUNT(p.id) OVER (PARTITION BY s.id) AS answered,
-        SUM(CASE WHEN p.is_correct THEN 1 ELSE 0 END) OVER (PARTITION BY s.id) AS correct
+        COUNT(p.id) AS answered,
+        SUM(CASE WHEN p.is_correct THEN 1 ELSE 0 END) AS correct
        FROM sessions s
        JOIN levels l ON l.id = s.level_id
        LEFT JOIN progress p ON p.session_id = s.id
        WHERE s.user_id = $1
-       ORDER BY s.id, l.level_number`,
+       GROUP BY s.id, l.title, l.level_number
+       ORDER BY s.last_active DESC`,
       [user_id]
     );
     res.json(result.rows);
@@ -139,18 +140,20 @@ router.get('/me', authenticateToken, async (req: AuthRequest, res: Response): Pr
 router.get('/students', authenticateToken, requireTeacher, async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const result = await pool.query(
-      `SELECT u.id, u.username, u.email,
+      `SELECT u.id, u.voornaam, u.achternaam, u.email,
+        k.naam AS klas_naam,
         l.level_number, l.title AS level_title,
-        s.completed, s.last_active,
+        s.id AS session_id, s.completed, s.last_active,
         COUNT(p.id) AS answered,
         SUM(CASE WHEN p.is_correct THEN 1 ELSE 0 END) AS correct
        FROM users u
+       LEFT JOIN klassen k ON k.id = u.klas_id
        LEFT JOIN sessions s ON s.user_id = u.id
        LEFT JOIN levels l ON l.id = s.level_id
        LEFT JOIN progress p ON p.session_id = s.id
        WHERE u.role = 'student'
-       GROUP BY u.id, l.level_number, l.title, s.completed, s.last_active
-       ORDER BY u.username, l.level_number`,
+       GROUP BY u.id, u.voornaam, u.achternaam, u.email, k.naam, l.level_number, l.title, s.id, s.completed, s.last_active
+       ORDER BY u.achternaam, l.level_number`,
     );
     res.json(result.rows);
   } catch (err) {

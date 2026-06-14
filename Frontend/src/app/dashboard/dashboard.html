@@ -1,56 +1,50 @@
 <div class="dashboard-wrapper">
-  <header class="dashboard-header">
-    <div class="header-left">
-      <span class="logo">🐦</span>
-      <h1>Docentendashboard</h1>
-    </div>
-    <button class="btn-logout" (click)="logout()">Uitloggen</button>
-  </header>
+  <app-sidebar></app-sidebar>
 
   <main class="dashboard-main">
-    <h2>Voortgang leerlingen</h2>
-
     @if (loading()) {
       <div class="loading">Laden...</div>
     }
 
-    @if (error()) {
-      <div class="error-message">{{ error() }}</div>
-    }
+    @if (!loading()) {
+      <div class="stats-grid">
+        <div class="stat-kaart">
+          <span class="stat-label">Actieve leerlingen</span>
+          <span class="stat-waarde">{{ stats().actieveLeerlingen }}</span>
+        </div>
+        <div class="stat-kaart">
+          <span class="stat-label">Gemiddelde voortgang</span>
+          <span class="stat-waarde">{{ stats().gemiddeldeVoortgang }}%</span>
+        </div>
+        <div class="stat-kaart">
+          <span class="stat-label">Lopen Achter</span>
+          <span class="stat-waarde">{{ stats().lopenAchter }}</span>
+        </div>
+        <div class="stat-kaart">
+          <span class="stat-label">Levels voltooid</span>
+          <span class="stat-waarde">{{ stats().levelsVoltooid }}</span>
+        </div>
+      </div>
 
-    @if (!loading() && !error()) {
-      <div class="students-grid">
-        @if (groupedStudents().length === 0) {
-          <div class="empty">Nog geen leerlingen gevonden.</div>
+      <div class="meldingen-kaart">
+        <h2>Recente Meldingen</h2>
+
+        @if (meldingen().length === 0) {
+          <p class="leeg">Geen recente meldingen.</p>
         }
 
-        @for (student of groupedStudents(); track student.id) {
-          <div class="student-card">
-            <div class="student-header">
-              <div class="student-avatar">{{ student.username[0].toUpperCase() }}</div>
-              <div class="student-info">
-                <h3>{{ student.username }}</h3>
-                <p>{{ student.email }}</p>
-              </div>
-              <div class="student-score">{{ getScore(student.levels) }}</div>
+        @for (melding of meldingen(); track melding.id) {
+          <div class="melding-rij">
+            <div class="melding-avatar">{{ melding.username?.[0]?.toUpperCase() }}</div>
+            <div class="melding-info">
+              <span class="melding-naam">{{ melding.username }}</span>
+              <span class="melding-detail">
+                {{ melding.completed ? 'heeft level ' + melding.level_number + ' voltooid' : 'is bezig met level ' + melding.level_number }}
+                — Score: {{ melding.correct || 0 }}/{{ melding.answered || 0 }}
+              </span>
+              <span class="melding-tijd">{{ formatDatum(melding.last_active) }}</span>
             </div>
-
-            @if (student.levels.length > 0) {
-              <div class="levels-list">
-                @for (level of student.levels; track level.level_number) {
-                  <div class="level-row">
-                    <span class="level-badge">Niveau {{ level.level_number }}</span>
-                    <span class="level-title">{{ level.level_title }}</span>
-                    <span class="level-correct">{{ level.correct || 0 }}/{{ level.answered || 0 }} goed</span>
-                    <span class="level-status" [class.completed]="level.completed">
-                      {{ level.completed ? '✅ Klaar' : '⏳ Bezig' }}
-                    </span>
-                  </div>
-                }
-              </div>
-            } @else {
-              <div class="no-levels">Nog niet gespeeld</div>
-            }
+            <button class="btn-bekijk" (click)="bekijkLeerling(melding.id)">Bekijk</button>
           </div>
         }
       </div>

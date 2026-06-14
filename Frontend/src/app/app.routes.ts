@@ -36,6 +36,31 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./menu/menu').then(m => m.Menu)
   },
+  {
+    path: 'dashboard/leerlingen',
+    canActivate: [teacherGuard],
+    loadComponent: () => import('./dashboard/leerlingen/leerlingen').then(m => m.Leerlingen)
+  },
+  {
+    path: 'dashboard/klassen',
+    canActivate: [teacherGuard],
+    loadComponent: () => import("./dashboard/klassen/klassen").then(m => m.Klassen)
+  },
+  {
+    path: 'dashboard/levels',
+    canActivate: [teacherGuard],
+    loadComponent: () => import('./dashboard/levels/levels').then(m => m.Levels)
+  },
+  {
+    path: 'dashboard/meldingen',
+    canActivate: [teacherGuard],
+    loadComponent: () => import('./dashboard/meldingen/meldingen').then(m => m.Meldingen)
+  },
+  {
+    path: 'dashboard/instellingen',
+    canActivate: [teacherGuard],
+    loadComponent: () => import("./dashboard/instellingen/instellingen").then(m => m.Instellingen)
+  },
   { path: '**', redirectTo: '/login' }
 ];
  

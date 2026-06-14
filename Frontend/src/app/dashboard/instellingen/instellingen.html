@@ -1,1 +1,92 @@
-<p>instellingen works!</p>
+<div class="dashboard-wrapper">
+  <app-sidebar></app-sidebar>
+
+  <main class="instellingen-main">
+
+    @if (melding()) {
+      <div class="melding" [class.goed]="meldingType() === 'goed'" [class.fout]="meldingType() === 'fout'">
+        {{ melding() }}
+      </div>
+    }
+
+    <div class="pagina-grid">
+
+      <!-- Leerlingen beheren -->
+      <div class="kaart">
+        <h2>Leerlingen beheren</h2>
+        @if (loading()) {
+          <p>Laden...</p>
+        }
+        @for (leerling of leerlingen(); track leerling.id) {
+          <div class="lijst-rij">
+            <span>{{ leerling.voornaam }} {{ leerling.achternaam }}</span>
+            <div class="rij-knoppen">
+              <button class="btn-bewerken" (click)="bewerkStart(leerling)">Bewerken</button>
+              <button class="btn-verwijder" (click)="leerlingVerwijderen(leerling.id)">🗑</button>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Leerling toevoegen -->
+      <div class="kaart">
+        <h2>Leerling toevoegen</h2>
+        <div class="form-row">
+          <input type="text" [(ngModel)]="nieuwVoornaam" placeholder="Voornaam" />
+          <input type="text" [(ngModel)]="nieuwAchternaam" placeholder="Achternaam" />
+        </div>
+        <input type="email" [(ngModel)]="nieuwEmail" placeholder="E-mailadres" />
+        <select [(ngModel)]="nieuwKlasId">
+          <option value="">Klas (optioneel)</option>
+          @for (klas of klassen(); track klas.id) {
+            <option [value]="klas.id">{{ klas.naam }}</option>
+          }
+        </select>
+        <button class="btn-primary" (click)="leerlingToevoegen()">Leerling toevoegen</button>
+      </div>
+
+      <!-- Klassen beheren -->
+      <div class="kaart">
+        <h2>Klassen beheren</h2>
+        @for (klas of klassen(); track klas.id) {
+          <div class="lijst-rij">
+            <span>{{ klas.naam }} — {{ klas.aantal_leerlingen }} leerlingen</span>
+            <button class="btn-verwijder" (click)="klasVerwijderen(klas.id)">🗑</button>
+          </div>
+        }
+      </div>
+
+      <!-- Klas toevoegen -->
+      <div class="kaart">
+        <h2>Klas toevoegen</h2>
+        <input type="text" [(ngModel)]="nieuweKlas" placeholder="Klasnaam (bijv. A3)" />
+        <button class="btn-primary" (click)="klasToevoegen()">+ Nieuwe klas</button>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Bewerk modal -->
+@if (bewerkLeerling()) {
+  <div class="modal-overlay" (click)="bewerkLeerling.set(null)">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2>Leerling bewerken</h2>
+      <div class="form-row">
+        <input type="text" [(ngModel)]="bewerkLeerling()!.voornaam" placeholder="Voornaam" />
+        <input type="text" [(ngModel)]="bewerkLeerling()!.achternaam" placeholder="Achternaam" />
+      </div>
+      <input type="email" [(ngModel)]="bewerkLeerling()!.email" placeholder="E-mail" />
+      <select [(ngModel)]="bewerkLeerling()!.klas_id">
+        <option value="">Geen klas</option>
+        @for (klas of klassen(); track klas.id) {
+          <option [value]="klas.id">{{ klas.naam }}</option>
+        }
+      </select>
+      <div class="modal-knoppen">
+        <button class="btn-primary" (click)="bewerkOpslaan()">Opslaan</button>
+        <button class="btn-annuleren" (click)="bewerkLeerling.set(null)">Annuleren</button>
+      </div>
+    </div>
+  </div>
+}

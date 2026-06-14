@@ -1,1 +1,54 @@
-<p>leerlingen works!</p>
+<div class="dashboard-wrapper">
+  <app-sidebar></app-sidebar>
+
+  <main class="leerlingen-main">
+    <div class="zoek-balk">
+      <input
+        type="text"
+        [(ngModel)]="zoekterm"
+        placeholder="Zoek op naam, klas of e-mail..."
+        (input)="filter()"
+      />
+      <button class="btn-filter" (click)="filter()">Filter</button>
+    </div>
+
+    @if (loading()) {
+      <div class="loading">Laden...</div>
+    }
+
+    @if (!loading()) {
+      <div class="tabel-wrapper">
+        <table class="leerlingen-tabel">
+          <thead>
+            <tr>
+              <th>Naam</th>
+              <th>Klas</th>
+              <th>Level</th>
+              <th>Voortgang</th>
+              <th>Laatst online</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (leerling of gefilterdeList(); track leerling.id) {
+              <tr (click)="bekijkLeerling(leerling.id)">
+                <td>{{ leerling.naam }}</td>
+                <td>{{ leerling.klas }}</td>
+                <td>{{ leerling.level }}</td>
+                <td>
+                  @if (leerling.answered > 0) {
+                    <div class="voortgang-balk">
+                      <div class="voortgang-fill" [style.width.%]="leerling.voortgang"></div>
+                    </div>
+                  } @else {
+                    <span class="geen-data">—</span>
+                  }
+                </td>
+                <td>{{ formatDatum(leerling.last_active) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </main>
+</div>

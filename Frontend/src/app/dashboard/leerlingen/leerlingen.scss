@@ -1,0 +1,90 @@
+.dashboard-wrapper {
+  display: flex;
+  min-height: 100vh;
+  font-family: Helvetica, Arial, sans-serif;
+  background: #f5f5f5;
+}
+
+.leerlingen-main {
+  flex: 1;
+  padding: 2rem;
+}
+
+.zoek-balk {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  input {
+    flex: 1;
+    padding: 0.65rem 1rem;
+    border: 1.5px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: Helvetica, Arial, sans-serif;
+    &:focus { outline: none; border-color: #F5A623; }
+  }
+}
+
+.btn-filter {
+  background: white;
+  border: 2px solid #3D1C00;
+  border-radius: 8px;
+  padding: 0.65rem 1.5rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-family: Helvetica, Arial, sans-serif;
+  color: #3D1C00;
+  &:hover { background: #f5f5f5; }
+}
+
+.tabel-wrapper {
+  background: white;
+  border-radius: 12px;
+  border: 2px solid #e0e0e0;
+  overflow: hidden;
+}
+
+.leerlingen-tabel {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    color: #555;
+    border-bottom: 2px solid #e0e0e0;
+    font-weight: 600;
+  }
+
+  td {
+    padding: 0.85rem 1rem;
+    font-size: 0.9rem;
+    color: #3D1C00;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  tr:hover td { background: #fff8f0; cursor: pointer; }
+}
+
+.voortgang-balk {
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  width: 120px;
+}
+
+.voortgang-fill {
+  height: 100%;
+  background: #F5A623;
+  border-radius: 4px;
+}
+
+.geen-data { color: #aaa; }
+
+.loading { color: #666; padding: 2rem; }

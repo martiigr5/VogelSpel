@@ -21,7 +21,7 @@ app.use('/api/auth',     authRoutes);
 app.use('/api/game',     gameRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/klassen', klasseRoutes);
-app.use('/api/leering', leerlingRoutes);
+app.use('/api/leerlingen', leerlingRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
