@@ -16,10 +16,20 @@
         <input id="achternaam" type="text" [(ngModel)]="achternaam" />
       </div>
     </div>
-    <div class="form-group">
-      <label for="klas">Klas</label>
-      <input id="klas" type="text" [(ngModel)]="klas" placeholder="bij. A3" />
+      <div class="form-row">
+        <div class="form-group">
+          <label for="klas">Klas</label>
+          <input id="klas" type="text" [(ngModel)]="klas" placeholder="bij. A3" />
+      </div>
+      <div class="form-group">
+        <label for="role">Ik ben een...</label>
+        <select id="role" [(ngModel)]="role">
+          <option value="student">Leerling</option>
+          <option value="teacher">Docent</option>
+        </select>
+      </div>
     </div>
+    
 
     <div class="form-group">
       <label for="email">E-mailadres</label>
