@@ -23,6 +23,7 @@ export class Level1 implements OnInit {
   gebruikersnaam = '';
   klas           = '';
   sessionId      = 0;
+  sceneImage     = '';
 
   klanken = ['aa', 'oe', 'ie'];
   huidigeKlankIndex = 0;
@@ -78,6 +79,7 @@ export class Level1 implements OnInit {
     this.http.get<any>('http://localhost:3000/api/game/levels/1').subscribe({
       next: (data) => {
         this.items.set(data.items);
+        this.sceneImage = data.level.scene_image || '';
         this.loading.set(false);
         this.toonKlank();
       },

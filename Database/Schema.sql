@@ -25,7 +25,6 @@ CREATE TABLE klassen (
 
 -- ============================================================
 -- TABEL: users
--- Bevat zowel leerlingen als docenten (onderscheid via role)
 -- ============================================================
 CREATE TABLE users (
     id               SERIAL PRIMARY KEY,
@@ -159,28 +158,28 @@ INSERT INTO klassen (naam) VALUES ('A3'), ('D4');
 -- ============================================================
 -- SEED DATA: levels
 -- ============================================================
-INSERT INTO levels (level_number, title, type, description) VALUES
-    (1, 'De klanken van de vogel', 'sound',    'Herken klanken en klik het juiste object'),
-    (2, 'Woorden zoeken',          'word',     'Vind het object dat bij het woord past'),
-    (3, 'Zinnen bouwen',           'sentence', 'Sorteer en vul zinnen in'),
-    (4, 'Schrijf het zelf',        'write',    'Schrijf korte zinnen met een woordenbank');
+INSERT INTO levels (level_number, title, type, description, scene_image) VALUES
+    (1, 'De klanken van de vogel', 'sound',    'Herken klanken en klik het juiste object', 'scenes/scene-level1.png'),
+    (2, 'Woorden zoeken',          'word',     'Vind het object dat bij het woord past',   NULL),
+    (3, 'Zinnen bouwen',           'sentence', 'Sorteer en vul zinnen in',                 NULL),
+    (4, 'Schrijf het zelf',        'write',    'Schrijf korte zinnen met een woordenbank', NULL);
 
 -- ============================================================
 -- SEED DATA: inventory_items niveau 1
 -- ============================================================
-INSERT INTO inventory_items (level_id, name, position_x, position_y, width, height, klank) VALUES
-    (1, 'paard',  120, 200, 100, 90,  'aa'),
-    (1, 'taart',  300, 350, 90,  80,  'aa'),
-    (1, 'kaars',  500, 150, 70,  100, 'aa'),
-    (1, 'aap',    700, 250, 85,  90,  'aa'),
-    (1, 'boek',   200, 450, 80,  70,  'oe'),
-    (1, 'hoed',   450, 300, 90,  75,  'oe'),
-    (1, 'bloem',  600, 400, 85,  85,  'oe'),
-    (1, 'stoel',  350, 180, 95,  90,  'oe'),
-    (1, 'fiets',  150, 320, 110, 80,  'ie'),
-    (1, 'riem',   550, 220, 80,  60,  'ie'),
-    (1, 'vlieg',  750, 180, 75,  70,  'ie'),
-    (1, 'brief',  400, 420, 85,  75,  'ie');
+INSERT INTO inventory_items (level_id, name, image_file, position_x, position_y, width, height, klank) VALUES
+    (1, 'paard',  'items/paard.png',  30,  300, 100, 90,  'aa'),
+    (1, 'taart',  'items/taart.png',  60,  400, 90,  80,  'aa'),
+    (1, 'kaars',  'items/kaars.png',  780, 350, 70,  100, 'aa'),
+    (1, 'aap',    'items/aap.png',    700, 260, 85,  90,  'aa'),
+    (1, 'boek',   'items/boek.png',   450, 410, 80,  70,  'oe'),
+    (1, 'hoed',   'items/hoed.png',   350, 60,  90,  75,  'oe'),
+    (1, 'bloem',  'items/bloem.png',  580, 370, 85,  85,  'oe'),
+    (1, 'stoel',  'items/stoel.png',  350, 400, 95,  90,  'oe'),
+    (1, 'fiets',  'items/fiets.png',  200, 350, 110, 80,  'ie'),
+    (1, 'riem',   'items/riem.png',   65,  120, 80,  60,  'ie'),
+    (1, 'vlieg',  'items/vlieg.png',  700, 120, 75,  70,  'ie'),
+    (1, 'brief',  'items/brief.png',  200, 175, 85,  75,  'ie');
 
 -- ============================================================
 -- SEED DATA: voorbeeld opdrachten niveau 2

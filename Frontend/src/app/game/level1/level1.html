@@ -30,7 +30,7 @@
     </div>
 
     <div class="scene-wrapper">
-      <div class="scene">
+      <div class="scene" [style.backgroundImage]="sceneImage ? 'url(/assets/' + sceneImage + ')' : ''">
         @for (item of items(); track item.id) {
           <div
             class="hotspot"
@@ -44,7 +44,11 @@
             @if (isGevonden(item)) {
               <span class="item-naam">{{ item.name }}</span>
             } @else {
-              <span class="item-verborgen">?</span>
+              @if (item.image_file) {
+                <img [src]="'/assets/' + item.image_file" [alt]="item.name" />
+              } @else {
+                <span class="item-verborgen">?</span>
+              }
             }
           </div>
         }
