@@ -20,6 +20,7 @@ export class Login {
   constructor(private authService: AuthService, private router: Router) {}
 
   onLogin(): void {
+    // valideert aan de frontend kant voordat het naar de backend gestuurd wordt
     if (!this.email || !this.password) {
       this.error = 'Vul je e-mail en wachtwoord in.';
       return;
@@ -28,6 +29,8 @@ export class Login {
     this.loading = true;
     this.error   = '';
 
+    // authService stuurt een POST naar /api/auth/login
+    // subscribe wacht op antwoord van de backend (asychroon)
     this.authService.login(this.email, this.password).subscribe({
       next: (response) => {
         this.loading = false;

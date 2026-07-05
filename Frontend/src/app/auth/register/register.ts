@@ -24,6 +24,7 @@ export class Register {
   constructor(private authService: AuthService, private router: Router) {}
 
   onRegister(): void {
+    // validatie frontend
     if (!this.voornaam || !this.achternaam || !this.email || !this.password) {
       this.error = 'Vul alle velden in.';
       return;

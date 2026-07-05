@@ -30,6 +30,8 @@ export class Instellingen implements OnInit {
 
   constructor(private http: HttpClient) {}
 
+  // wordt aangeroepen waneer component geladen is
+  // begindata ophalen
   ngOnInit(): void {
     this.laadLeerlingen();
     this.laadKlassen();
@@ -88,6 +90,7 @@ export class Instellingen implements OnInit {
   }
 
   bewerkStart(leerling: any): void {
+    // spread operator (...) maakt een kopie van Leerling-object
     this.bewerkLeerling.set({ ...leerling });
   }
 
