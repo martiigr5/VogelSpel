@@ -1,59 +1,168 @@
-# Frontend
+# Het Vogelspel
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.14.
+Een educatief point-and-click spel voor NT2-leerlingen van 9 tot 12 jaar, met een docentendashboard voor het bijhouden van voortgang.
 
-## Development server
+## Technische stack
 
-To start a local development server, run:
+- **Frontend:** Angular (latest)
+- **Backend:** Express.js (Node.js)
+- **Database:** PostgreSQL 18
 
-```bash
+## Vereisten
+
+Installeer het volgende voordat je begint:
+
+- [Node.js LTS](https://nodejs.org)
+- [PostgreSQL 18](https://www.postgresql.org/download/)
+- Angular CLI: `npm install -g @angular/cli`
+
+## Installatie
+
+### 1. Database opzetten
+
+Open een terminal en start PostgreSQL:
+
+```powershell
+& "C:\Program Files\PostgreSQL\18\bin\psql.exe" -U postgres -p 5432
+```
+
+Maak de database aan en laad het schema:
+
+```sql
+CREATE DATABASE vogelspel;
+\c vogelspel
+\i pad/naar/database/schema.sql
+\q
+```
+
+> **Let op:** Pas de poort aan als je PostgreSQL op een andere poort hebt draaien.
+
+---
+
+### 2. Backend opzetten
+
+```powershell
+cd backend
+npm install
+```
+
+Maak een `.env` bestand aan in de `backend/` map:
+
+```
+DB_HOST=localhost
+DB_PORT=5000
+DB_NAME=vogelspel
+DB_USER=postgres
+DB_PASSWORD=jouw_postgres_wachtwoord
+JWT_SECRET=verzin_een_lang_geheim_woord
+PORT=3000
+```
+
+Start de backend:
+
+```powershell
+npm run dev
+```
+
+De backend draait op `http://localhost:3000`. Controleer via `http://localhost:3000/api/health`.
+
+---
+
+### 3. Frontend opzetten
+
+```powershell
+cd frontend
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+De frontend draait op `http://localhost:4200`.
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Mappenstructuur
 
-```bash
-ng generate component component-name
+```
+vogelspel/
+├── frontend/          ← Angular applicatie
+│   └── src/app/
+│       ├── auth/          ← Login, registratie, guards
+│       ├── menu/          ← Hoofdmenu leerling
+│       ├── game/          ← Levelkeuze
+│       │   └── level1/    ← Niveau 1: klankherkenning
+│       ├── laden/         ← Spel laden scherm
+│       ├── dashboard/     ← Docentendashboard
+│       │   ├── sidebar/
+│       │   ├── leerlingen/
+│       │   ├── klassen/
+│       │   ├── instellingen/
+│       │   ├── levels/
+│       │   └── meldingen/
+│       └── shared/
+│           └── services/  ← AuthService, GameService, ProgressService
+├── backend/           ← Express.js API
+│   └── src/
+│       ├── routes/        ← auth, game, progress, klassen, leerlingen
+│       ├── middleware/    ← JWT authenticatie
+│       └── db/            ← PostgreSQL pool
+└── database/
+    └── schema.sql     ← Databaseschema met seed data
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
+## Accounts aanmaken
+
+Na het installeren kun je via de registratiepagina (`/register`) accounts aanmaken. Kies bij rol **Docent** voor toegang tot het dashboard.
+
+Of via de terminal:
+
+```powershell
+# Docent aanmaken
+Invoke-RestMethod -Uri "http://localhost:3000/api/auth/register" -Method POST -ContentType "application/json" -Body '{"voornaam":"Test","achternaam":"Docent","klas":"","email":"docent@test.nl","password":"test1234","role":"teacher"}'
+
+# Leerling aanmaken
+Invoke-RestMethod -Uri "http://localhost:3000/api/auth/register" -Method POST -ContentType "application/json" -Body '{"voornaam":"Test","achternaam":"Leerling","klas":"A3","email":"leerling@test.nl","password":"test1234","role":"student"}'
 ```
 
-## Building
+---
 
-To build the project run:
+## Functionaliteiten
 
-```bash
-ng build
-```
+### Leerling
+- Registreren en inloggen
+- Hoofdmenu met nieuw spel, spel laden en uitloggen
+- Niveau 1: klankherkenning (point-and-click)
+- Voortgang automatisch opgeslagen
+- Meerdere spellen kunnen opslaan en laden
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+### Docent
+- Inloggen op dashboard
+- Overzicht van leerlingvoortgang
+- Leerlingen beheren (toevoegen, bewerken, verwijderen)
+- Klassen beheren (toevoegen, verwijderen)
 
-## Running unit tests
+---
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Omgevingsvariabelen
 
-```bash
-ng test
-```
+| Variabele     | Beschrijving                        |
+|---------------|-------------------------------------|
+| DB_HOST       | Host van de PostgreSQL database     |
+| DB_PORT       | Poort van PostgreSQL (standaard 5432) |
+| DB_NAME       | Naam van de database                |
+| DB_USER       | PostgreSQL gebruikersnaam           |
+| DB_PASSWORD   | PostgreSQL wachtwoord               |
+| JWT_SECRET    | Geheime sleutel voor JWT tokens     |
+| PORT          | Poort waarop de backend draait      |
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## Bekende aandachtspunten
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+-	Het .env bestand staat niet in Git — maak dit handmatig aan
+-	Niveau 2, 3 en 4 zijn nog niet gebouwd
+-	Placeholders voor afbeeldingen
+-	Opties menu in game moet nog ontwikkeld worden
+-	Bij het dashboard moeten, klassenoverzicht, leveloverzicht en meldingen volledig implementeren.
+-	Het bewerken van accounts is nog niet mogelijk. Wel het verwijderen.

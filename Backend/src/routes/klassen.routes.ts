@@ -23,17 +23,21 @@ router.get('/', authenticateToken, requireTeacher, async (req: AuthRequest, res:
 
 // POST /api/klassen — nieuwe klas aanmaken
 router.post('/', authenticateToken, requireTeacher, async (req: AuthRequest, res: Response): Promise<void> => {
+  
   const { naam } = req.body;
+  
   if (!naam) {
     res.status(400).json({ error: 'Naam is verplicht' });
     return;
   }
+
   try {
     const result = await pool.query(
       'INSERT INTO klassen (naam) VALUES ($1) RETURNING *',
       [naam]
     );
     res.status(201).json(result.rows[0]);
+  
   } catch (err: any) {
     if (err.code === '23505') {
       res.status(409).json({ error: 'Klas bestaat al' });
@@ -46,10 +50,13 @@ router.post('/', authenticateToken, requireTeacher, async (req: AuthRequest, res
 
 // DELETE /api/klassen/:id — klas verwijderen
 router.delete('/:id', authenticateToken, requireTeacher, async (req: AuthRequest, res: Response): Promise<void> => {
+  
   const id = parseInt(req.params.id);
+  
   try {
     await pool.query('DELETE FROM klassen WHERE id = $1', [id]);
     res.json({ message: 'Klas verwijderd' });
+  
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Klas verwijderen mislukt' });
@@ -58,7 +65,9 @@ router.delete('/:id', authenticateToken, requireTeacher, async (req: AuthRequest
 
 // GET /api/klassen/:id/leerlingen — leerlingen van een klas
 router.get('/:id/leerlingen', authenticateToken, requireTeacher, async (req: AuthRequest, res: Response): Promise<void> => {
+  
   const id = parseInt(req.params.id);
+  
   try {
     const result = await pool.query(
       `SELECT id, voornaam, achternaam, email, klas_id
@@ -67,6 +76,7 @@ router.get('/:id/leerlingen', authenticateToken, requireTeacher, async (req: Aut
       [id]
     );
     res.json(result.rows);
+  
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Leerlingen ophalen mislukt' });

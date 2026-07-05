@@ -1,7 +1,6 @@
 import { Router, Response } from 'express';
 import pool from '../db/pool';
 import { authenticateToken, requireTeacher, AuthRequest } from '../middleware/auth.middleware';
-import { promises } from 'dns';
 
 const router = Router();
 
@@ -11,6 +10,7 @@ router.post('/session', authenticateToken, async (req: AuthRequest, res: Respons
   const user_id = req.user!.id;
 
   try {
+    // wordt nieuwe sessie aangemaakt elke keer als een leerling een level start
     const result = await pool.query(
       `INSERT INTO sessions (user_id, level_id)
        VALUES ($1, $2)
@@ -29,13 +29,14 @@ router.post('/answer', authenticateToken, async (req: AuthRequest, res: Response
   const { session_id, assignment_id, is_correct, student_answer } = req.body;
 
   try {
-    // Kijk of er al een antwoord is (voor attempts bij)
+    // Kijk of er al een antwoord is
     const existing = await pool.query(
       'SELECT id, attempts FROM progress WHERE session_id = $1 AND assignment_id = $2',
       [session_id, assignment_id]
     );
 
     if (existing.rows.length > 0) {
+      // eerder beantwoord? deze bijwerken en attempts +1
       const updated = await pool.query(
         `UPDATE progress
          SET is_correct = $1, attempts = attempts + 1, student_answer = $2, answered_at = NOW()
@@ -45,6 +46,7 @@ router.post('/answer', authenticateToken, async (req: AuthRequest, res: Response
       );
       res.json(updated.rows[0]);
     } else {
+      // eerste poging? nieuwe antwoord aanmaken
       const inserted = await pool.query(
         `INSERT INTO progress (session_id, assignment_id, is_correct, student_answer)
          VALUES ($1, $2, $3, $4)
@@ -64,6 +66,7 @@ router.post('/collect', authenticateToken, async (req: AuthRequest, res: Respons
   const { session_id, item_id } = req.body;
 
   try {
+    // ON CONFLICT voorkomt een databasefout bij meerdere klikken (dubbleklik)
     const result = await pool.query(
       `INSERT INTO collected_items (session_id, item_id)
        VALUES ($1, $2)
@@ -94,11 +97,13 @@ router.post('/complete', authenticateToken, async (req: AuthRequest, res: Respon
   }
 });
 
+// DELETE /api/progress/session/:sessionId — opgeslagen spel verwijderen
 router.delete('/session/:sessionId', authenticateToken, async (req: AuthRequest, res: Response): Promise<void> => {
   const user_id = req.user!.id;
   const session_id = parseInt(req.params.sessionId);
 
   try {
+    // leerling kan alleen zijn eigen sessies verwijderen (AND user_id = $2)
     await pool.query(
       'DELETE FROM sessions WHERE id = $1 AND user_id = $2',
       [session_id, user_id]
@@ -110,7 +115,7 @@ router.delete('/session/:sessionId', authenticateToken, async (req: AuthRequest,
   }
 });
 
-// GET /api/progress/me — voortgang van ingelogde leerling
+// GET /api/progress/me — voortgang van ingelogde leerling ophalen 
 router.get('/me', authenticateToken, async (req: AuthRequest, res: Response): Promise<void> => {
   const user_id = req.user!.id;
 

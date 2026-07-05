@@ -1,9 +1,4 @@
--- ============================================================
--- Schema: NT2 Vogelspel
--- Database: PostgreSQL 18
--- ============================================================
-
--- Opruimen (handig tijdens development)
+-- ruimt op als er al tables staan zodat er geen dubbele data komt.
 DROP TABLE IF EXISTS collected_items CASCADE;
 DROP TABLE IF EXISTS progress CASCADE;
 DROP TABLE IF EXISTS sessions CASCADE;
@@ -14,18 +9,14 @@ DROP TABLE IF EXISTS levels CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS klassen CASCADE;
 
--- ============================================================
--- TABEL: klassen
--- ============================================================
+-- maakt de table Klassen aan
 CREATE TABLE klassen (
     id          SERIAL PRIMARY KEY,
     naam        VARCHAR(20) NOT NULL UNIQUE,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
--- ============================================================
--- TABEL: users
--- ============================================================
+-- maakt de table User aan
 CREATE TABLE users (
     id               SERIAL PRIMARY KEY,
     email            VARCHAR(100) NOT NULL UNIQUE,
@@ -39,9 +30,7 @@ CREATE TABLE users (
     created_at       TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
--- ============================================================
--- TABEL: levels
--- ============================================================
+-- maakt de table Levels aan
 CREATE TABLE levels (
     id               SERIAL PRIMARY KEY,
     level_number     INT          NOT NULL UNIQUE CHECK (level_number >= 1),
@@ -53,9 +42,7 @@ CREATE TABLE levels (
     is_active        BOOLEAN      NOT NULL DEFAULT TRUE
 );
 
--- ============================================================
--- TABEL: inventory_items
--- ============================================================
+-- maakt de table Inventory_items aan
 CREATE TABLE inventory_items (
     id               SERIAL PRIMARY KEY,
     level_id         INT          NOT NULL REFERENCES levels(id) ON DELETE CASCADE,
@@ -70,9 +57,7 @@ CREATE TABLE inventory_items (
     height           INT DEFAULT 80
 );
 
--- ============================================================
--- TABEL: assignments
--- ============================================================
+-- maakt de table assignments aan
 CREATE TABLE assignments (
     id               SERIAL PRIMARY KEY,
     level_id         INT          NOT NULL REFERENCES levels(id) ON DELETE CASCADE,
@@ -90,9 +75,7 @@ CREATE TABLE assignments (
     order_index      INT          NOT NULL DEFAULT 0
 );
 
--- ============================================================
--- TABEL: assignment_options
--- ============================================================
+-- maakt de table assignment_options aan
 CREATE TABLE assignment_options (
     id               SERIAL PRIMARY KEY,
     assignment_id    INT          NOT NULL REFERENCES assignments(id) ON DELETE CASCADE,
@@ -103,9 +86,7 @@ CREATE TABLE assignment_options (
     order_index      INT          NOT NULL DEFAULT 0
 );
 
--- ============================================================
--- TABEL: sessions
--- ============================================================
+-- maakt de table sessions aan
 CREATE TABLE sessions (
     id               SERIAL PRIMARY KEY,
     user_id          INT          NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -116,10 +97,7 @@ CREATE TABLE sessions (
     completed_at     TIMESTAMP
 );
 
--- ============================================================
--- TABEL: progress
--- Geen FK op assignment_id omdat niveau 1 inventory_items gebruikt
--- ============================================================
+-- maakt de table progress aan
 CREATE TABLE progress (
     id               SERIAL PRIMARY KEY,
     session_id       INT          NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
@@ -130,9 +108,7 @@ CREATE TABLE progress (
     answered_at      TIMESTAMP    NOT NULL DEFAULT NOW()
 );
 
--- ============================================================
--- TABEL: collected_items
--- ============================================================
+-- maakt de table collected_items aan
 CREATE TABLE collected_items (
     id               SERIAL PRIMARY KEY,
     session_id       INT          NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
@@ -140,9 +116,7 @@ CREATE TABLE collected_items (
     collected_at     TIMESTAMP    NOT NULL DEFAULT NOW()
 );
 
--- ============================================================
--- INDEXEN
--- ============================================================
+-- Maakt indexen aan voor snellere database search
 CREATE INDEX idx_sessions_user        ON sessions(user_id);
 CREATE INDEX idx_sessions_level       ON sessions(level_id);
 CREATE INDEX idx_progress_session     ON progress(session_id);
@@ -150,23 +124,17 @@ CREATE INDEX idx_collected_session    ON collected_items(session_id);
 CREATE INDEX idx_assignments_level    ON assignments(level_id);
 CREATE INDEX idx_options_assignment   ON assignment_options(assignment_id);
 
--- ============================================================
--- SEED DATA: klassen
--- ============================================================
+-- Seed data voor Klassen 
 INSERT INTO klassen (naam) VALUES ('A3'), ('D4');
 
--- ============================================================
--- SEED DATA: levels
--- ============================================================
+-- Seed data voor Levels
 INSERT INTO levels (level_number, title, type, description, scene_image) VALUES
     (1, 'De klanken van de vogel', 'sound',    'Herken klanken en klik het juiste object', 'scenes/scene-level1.png'),
     (2, 'Woorden zoeken',          'word',     'Vind het object dat bij het woord past',   NULL),
     (3, 'Zinnen bouwen',           'sentence', 'Sorteer en vul zinnen in',                 NULL),
     (4, 'Schrijf het zelf',        'write',    'Schrijf korte zinnen met een woordenbank', NULL);
 
--- ============================================================
--- SEED DATA: inventory_items niveau 1
--- ============================================================
+-- Seed data voor inventory_items (lvl1)
 INSERT INTO inventory_items (level_id, name, image_file, position_x, position_y, width, height, klank) VALUES
     (1, 'paard',  'items/paard.png',  30,  300, 100, 90,  'aa'),
     (1, 'taart',  'items/taart.png',  60,  400, 90,  80,  'aa'),
@@ -181,9 +149,7 @@ INSERT INTO inventory_items (level_id, name, image_file, position_x, position_y,
     (1, 'vlieg',  'items/vlieg.png',  700, 120, 75,  70,  'ie'),
     (1, 'brief',  'items/brief.png',  200, 175, 85,  75,  'ie');
 
--- ============================================================
--- SEED DATA: voorbeeld opdrachten niveau 2
--- ============================================================
+-- Seed data voor assignment (lvl2)
 INSERT INTO assignments (level_id, question_type, prompt_text, order_index) VALUES
     (2, 'word_click', 'Klik op de "appel"',  1),
     (2, 'word_click', 'Klik op de "stoel"',  2);
@@ -196,9 +162,7 @@ INSERT INTO assignment_options (assignment_id, option_text, image_file, is_corre
     (2, 'tafel',  'images/tafel.png',  FALSE),
     (2, 'bank',   'images/bank.png',   FALSE);
 
--- ============================================================
--- SEED DATA: voorbeeld opdracht niveau 3
--- ============================================================
+-- Seed data voor assignments (lvl3)
 INSERT INTO assignments (level_id, question_type, prompt_text, order_index) VALUES
     (3, 'sentence_order', 'Zet de woorden in de juiste volgorde', 1),
     (3, 'sentence_fill',  'Vul het ontbrekende woord in',         2);
@@ -210,9 +174,7 @@ INSERT INTO assignment_options (assignment_id, option_text, is_correct, order_in
     (3, 'hoog',   TRUE, 4),
     (4, 'vliegt', TRUE, 0);
 
--- ============================================================
--- SEED DATA: voorbeeld opdracht niveau 4
--- ============================================================
+-- Seed data voor assignments(lvl4)
 INSERT INTO assignments (level_id, question_type, prompt_text, word_bank, order_index) VALUES
     (4, 'write',
      'Schrijf een zin over de vogel. Gebruik de woorden hieronder.',

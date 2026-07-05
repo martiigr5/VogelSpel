@@ -5,7 +5,7 @@ import { authenticateToken, requireTeacher, AuthRequest } from '../middleware/au
 
 const router = Router();
 
-// GET /api/leerlingen — alle leerlingen
+// GET /api/leerlingen — alle leerlingen ophalen
 router.get('/', authenticateToken, requireTeacher, async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const result = await pool.query(
