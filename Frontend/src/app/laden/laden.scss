@@ -5,7 +5,7 @@
 }
 
 .laden-header {
-  background: #F5A623;
+  background: #FFCC99;
   padding: 1rem 2rem;
   display: flex;
   align-items: center;
@@ -23,8 +23,8 @@
     font-weight: 900;
     color: #3D1C00;
     line-height: 1;
-    text-align: right;
-    .highlight { background: white; padding: 0.1rem 0.4rem; display: block; }
+    text-align: center;
+    .highlight { background: #F5A623; padding: 0.1rem 0.4rem; display: block-inline; }
     .main      { display: block; }
   }
 }
