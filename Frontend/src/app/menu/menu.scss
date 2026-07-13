@@ -4,46 +4,6 @@
   font-family: Helvetica, Arial, sans-serif;
 }
 
-.menu-header {
-  background: #FFCC99;
-  padding: 1rem 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  .user-info {
-    display: flex;
-    flex-direction: column;
-
-    .username {
-      font-weight: 700;
-      font-size: 1rem;
-      color: #3D1C00;
-    }
-
-    .klas {
-      font-size: 0.8rem;
-      color: #3D1C00;
-    }
-  }
-
-  .logo h1 {
-    font-size: 2rem;
-    font-weight: 900;
-    color: #3D1C00;
-    line-height: 1;
-    text-align: center;
-
-    .highlight {
-      background: #F5A623;
-      padding: 0 0.3rem;
-      display: inline-block;
-    }
-
-    .main { display: block; }
-  }
-}
-
 .menu-main {
   display: flex;
   align-items: center;
@@ -59,42 +19,3 @@
   max-width: 500px;
 }
 
-.menu-btn {
-  background: white;
-  border: 2px solid #e0e0e0;
-  border-radius: 16px;
-  padding: 2rem 1.5rem;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem;
-  transition: box-shadow 0.15s, transform 0.15s;
-  font-family: Helvetica, Arial, sans-serif;
-
-  &:hover:not(:disabled) {
-    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-    transform: translateY(-2px);
-    background: #FFCC99;
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  &.actief {
-    background: #F5A623;
-    border-color: #F5A623;
-  }
-
-  .btn-label {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #3D1C00;
-  }
-
-  .btn-icon {
-    font-size: 2rem;
-  }
-}

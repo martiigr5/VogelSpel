@@ -12,9 +12,9 @@ export const routes: Routes = [
     loadComponent: () => import('./auth/register/register').then(m => m.Register)
   },
   {
-    path: 'game',
+    path: 'level-select',
     canActivate: [authGuard],
-    loadComponent: () => import('./game/game').then(m => m.Game)
+    loadComponent: () => import('./level-select/level-select').then(m => m.LevelSelect)
   },
   {
   path: 'laden',
@@ -22,9 +22,9 @@ export const routes: Routes = [
   loadComponent: () => import('./laden/laden').then(m => m.Laden)
   },
   {
-    path: 'game/level1',
+    path: 'level-select/level1',
     canActivate: [authGuard],
-    loadComponent: () => import('./game/level1/level1').then(m => m.Level1)
+    loadComponent: () => import('./level-select/level1/level1').then(m => m.Level1)
   },
   {
     path: 'dashboard',

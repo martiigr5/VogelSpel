@@ -32,6 +32,7 @@ router.post('/', authenticateToken, requireTeacher, async (req: AuthRequest, res
   }
 
   try {
+    // geeft  wachtwoord mee, TODO, eerste keer inloggen, wachtwoord aanpassen
     const wachtwoord = password || 'Welkom123';
     const password_hash = await bcrypt.hash(wachtwoord, 10);
 

@@ -1,0 +1,38 @@
+.game-header {
+    background: #FFCC99;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    .username { font-weight: 700; font-size: 1rem; color: #3D1C00; }
+    .klas     { font-size: 0.8rem; color: #3D1C00; }
+}
+
+.logo h1 {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #3D1C00;
+    line-height: 1;
+    text-align: center;
+    .highlight { background: #F5A623; padding: 0.1rem 0.4rem; display: block-inline; }
+    .main      { display: block; }
+}
+
+.btn-terug {
+    background: white;
+    color: #3D1C00;
+    border: 2px solid #3D1C00;
+    border-radius: 6px;
+    padding: 0.4rem 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: Arial, Helvetica, sans-serif;
+    &:hover { background: #f5f5f5;}
+}

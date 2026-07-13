@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../shared/services/auth.service';
+import { Header } from "../shared/components/header/header";
+import { SessieKaart } from './components/sessie-kaart/sessie-kaart';
 
 @Component({
   selector: 'app-laden',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, Header, SessieKaart],
   templateUrl: './laden.html',
   styleUrl: './laden.scss'
 })
@@ -43,33 +45,16 @@ export class Laden implements OnInit {
 
   laadSessie(sessie: any): void {
     if (sessie.level_number === 1) {
-      this.router.navigate(['/game/level1']);
+      this.router.navigate(['/level-select/level1']);
     }
   }
 
-  verwijderSessie(sessie: any, event: Event): void {
-    event.stopPropagation();
+  verwijderSessie(sessie: any): void {
     this.http.delete(`http://localhost:3000/api/progress/session/${sessie.id}`).subscribe({
       next: () => {
         this.sessies.set(this.sessies().filter(s => s.id !== sessie.id));
       }
     });
-  }
-
-  formatDatum(datum: string): string {
-    if (!datum) return '';
-      const d = new Date(datum);
-      const nu = new Date();
-      const diff = nu.getTime() - d.getTime();
-      const uren = Math.floor(diff / 3600000);
-      if (uren < 24) return `vandaag ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
-    return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
-  }
-
-  getVoortgang(sessie: any): number {
-    const answered = Number(sessie.answered || 0);
-    const totaal   = 12;
-    return Math.min(Math.round((answered / totaal) * 100), 100);
   }
 
   terugNaarMenu(): void {

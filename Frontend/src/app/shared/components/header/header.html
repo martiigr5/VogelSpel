@@ -1,0 +1,20 @@
+<header class="game-header">
+    <div class="header-left">
+        <div class="user-info">
+            <span class="username">{{ gebruikersnaam }}</span>
+            <span class="klas">Klas: {{ klas }}</span>
+        </div>
+    </div>
+
+    @if (toonTerug) {
+        <button class="btn-terug" (click)="onTerug()">Terug</button>
+    }
+
+    @if (toonUitloggen) {
+        <button class="btn-uitloggen" (click)="onUitloggen()">Uitloggen</button>
+    }
+
+    <div class="logo">
+        <h1><span class="highlight">Het</span><span class="main">Vogelspel</span></h1>
+    </div>
+</header>

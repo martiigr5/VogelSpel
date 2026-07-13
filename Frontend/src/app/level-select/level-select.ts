@@ -3,16 +3,17 @@ import { CommonModule } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { AuthService } from "../shared/services/auth.service";
-import { ProgressService } from "../shared/services/progress";
+import { Header } from "../shared/components/header/header";
+import { LevelKaart } from "./components/level-kaart/level-kaart";
 
 @Component({
-  selector: 'app-game',
+  selector: 'app-level-select',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './game.html',
-  styleUrl: './game.scss'
+  imports: [CommonModule, Header, LevelKaart],
+  templateUrl: './level-select.html',
+  styleUrl: './level-select.scss'
 })
-export class Game implements OnInit {
+export class LevelSelect implements OnInit {
   levels         = signal<any[]>([]);
   loading        = signal(true);
   error          = signal('');
@@ -22,7 +23,6 @@ export class Game implements OnInit {
   constructor(
     private http: HttpClient,
     private authService: AuthService,
-    private progressService: ProgressService,
     private router: Router
   ) {}
 
@@ -57,9 +57,13 @@ export class Game implements OnInit {
     return namen[level.level_number] || level.title;
   }
 
-  startLevel(level: any): void {
+  isUitgeschakeld(level: any): boolean {
+    return level.level_number > 1;
+  }
+
+  onLevelGeklikt(level: any): void {
     if (level.level_number === 1) {
-      this.router.navigate(['/game/level1'], { queryParams: { nieuw: true } });
+      this.router.navigate(['/level-select/level1'], { queryParams:{nieuw: true} });
     }
   }
 

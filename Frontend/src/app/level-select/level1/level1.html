@@ -1,14 +1,11 @@
 <div class="level1-wrapper">
-  <header class="level-header">
-    <div class="user-info">
-      <span class="username">{{ gebruikersnaam }}</span>
-      <span class="klas">Klas: {{ klas }}</span>
-    </div>
-    <button class="btn-terug" (click)="terugNaarMenu()">Terug</button>
-    <div class="logo">
-      <h1><span class="highlight">Het</span><span class="main">Vogelspel</span></h1>
-    </div>
-  </header>
+  <app-header
+    [gebruikersnaam]="gebruikersnaam"
+    [klas]="klas"
+    [toonTerug]="true"
+    [toonUitloggen]="false"
+    (terugGeklikt)="terugNaarMenu()"
+  />
 
   @if (loading()) {
     <div class="loading">Laden...</div>

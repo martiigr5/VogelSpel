@@ -3,11 +3,12 @@ import { CommonModule } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Router, ActivatedRoute } from "@angular/router";
 import { AuthService } from "../../shared/services/auth.service";
+import { Header } from "../../shared/components/header/header";
 
 @Component({
   selector: 'app-level1',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, Header],
   templateUrl: './level1.html',
   styleUrl: './level1.scss'
 })

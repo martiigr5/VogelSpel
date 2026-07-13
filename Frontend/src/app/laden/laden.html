@@ -1,14 +1,11 @@
 <div class="laden-wrapper">
-  <header class="laden-header">
-    <div class="user-info">
-      <span class="username">{{ gebruikersnaam }}</span>
-      <span class="klas">Klas: {{ klas }}</span>
-    </div>
-    <button class="btn-terug" (click)="terugNaarMenu()">Terug</button>
-    <div class="logo">
-      <h1><span class="highlight">Het</span><span class="main">Vogelspel</span></h1>
-    </div>
-  </header>
+  <app-header
+    [gebruikersnaam]="gebruikersnaam"
+    [klas]="klas"
+    [toonTerug]="true"
+    [toonUitloggen]="false"
+    (terugGeklikt)="terugNaarMenu()"
+  />
 
   <main class="laden-main">
     @if (loading()) {
@@ -25,19 +22,11 @@
     @if (!loading() && sessies().length > 0) {
       <div class="sessies-lijst">
         @for (sessie of sessies(); track sessie.id) {
-          <div class="sessie-kaart" (click)="laadSessie(sessie)">
-            <div class="sessie-links">
-              <div class="sessie-nummer">{{ sessie.level_number }}</div>
-              <div class="sessie-info">
-                <h3>{{ sessie.level_title }}</h3>
-                <p>{{ formatDatum(sessie.last_active) }}</p>
-                <div class="voortgang-balk">
-                  <div class="voortgang-fill" [style.width.%]="getVoortgang(sessie)"></div>
-                </div>
-              </div>
-            </div>
-            <button class="btn-verwijder" (click)="verwijderSessie(sessie, $event)">🗑</button>
-          </div>
+          <app-sessie-kaart
+            [sessie]="sessie"
+            (geladen)="laadSessie($event)"
+            (verwijderd)="verwijderSessie($event)"
+          />
         }
       </div>
     }

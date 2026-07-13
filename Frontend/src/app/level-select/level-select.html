@@ -1,0 +1,28 @@
+<div class="level-select-wrapper">
+  <app-header
+    [gebruikersnaam]="gebruikersnaam"
+    [klas]="klas"
+    [toonTerug]="true"
+    [toonUitloggen]="false"
+    (terugGeklikt)="terugNaarMenu()"
+  />
+
+  <main class="level-select-main">
+    @if (loading()) {
+      <div class="loading">Laden...</div>
+    }
+
+    @if (!loading()) {
+      <div class="levels-grid">
+        @for (level of levels(); track level.id) {
+          <app-level-kaart
+            [level]="level"
+            [naam]="getLevelNaam(level)"
+            [uitgeschakeld]="isUitgeschakeld(level)"
+            (geklikt)="onLevelGeklikt($event)"
+            />
+        }
+      </div>
+    }
+  </main>
+</div>

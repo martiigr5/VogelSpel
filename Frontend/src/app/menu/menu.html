@@ -1,35 +1,36 @@
 <div class="menu-wrapper">
-  <header class="menu-header">
-    <div class="user-info">
-      <span class="username">{{ gebruikersnaam }}</span>
-      <span class="klas">Klas: {{ klas }}</span>
-    </div>
-    <div class="logo">
-      <h1><span class="highlight">Het</span><span class="main">Vogelspel</span></h1>
-    </div>
-  </header>
+  <app-header
+    [gebruikersnaam]="gebruikersnaam"
+    [klas]="klas"
+    [toonTerug]="false"
+    [toonUitloggen]="false"
+  />
 
   <main class="menu-main">
     <div class="menu-grid">
-      <button class="menu-btn" (click)="newGame()">
-        <span class="btn-label">Nieuw spel</span>
-        <span class="btn-icon">🎮</span>
-      </button>
-
-      <button class="menu-btn" (click)="loadGame()">
-        <span class="btn-label">Spel laden</span>
-        <span class="btn-icon">💾</span>
-      </button>
-
-      <button class="menu-btn" disabled>
-        <span class="btn-label">Opties</span>
-        <span class="btn-icon">⚙️</span>
-      </button>
-
-      <button class="menu-btn" (click)="logout()">
-        <span class="btn-label">Logout</span>
-        <span class="btn-icon">🚪</span>
-      </button>
+      <app-menu-knop
+        label="Nieuw Spel"
+        icon="🎮"
+        [actief]="true"
+        (geklikt)="newGame()"
+      />
+      <app-menu-knop
+        label="Spel Laden"
+        icon="💾"
+        [actief]="true"
+        (geklikt)="loadGame()"
+      />
+      <app-menu-knop
+        label="Opties"
+        icon="⚙️"
+        [uitgeschakeld]="true"
+      />
+      <app-menu-knop
+        label="Logout"
+        icon="🚪"
+        [actief]="true"
+        (geklikt)="logout()"
+      />
     </div>
   </main>
 </div>

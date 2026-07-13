@@ -1,0 +1,19 @@
+.level-select-wrapper {
+  min-height: 100vh;
+  background: white;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.level-select-main {
+  padding: 2.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.levels-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.loading { text-align: center; padding: 3rem; color: #666; }

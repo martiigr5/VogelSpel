@@ -63,7 +63,7 @@ router.get('/levels/:id', authenticateToken, async (req: AuthRequest, res: Respo
             [levelId]
         );
 
-        // voeg alle oopgehaalde quesries toe als 1  response zodat de frontend niet extra requests hoeft te doen.
+        // voeg alle opgehaalde quesries toe als 1  response zodat de frontend niet extra requests hoeft te doen.
         res.json({
             level: levelResult.rows[0],
             assignments: assignmentsResult.rows,
