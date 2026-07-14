@@ -1,0 +1,19 @@
+.scene-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+}
+
+.scene {
+  position: relative;
+  width: 900px;
+  height: 500px;
+  background: #c8e6c9;
+  border-radius: 16px;
+  border: 3px solid #a5d6a7;
+  background-size: cover;
+  background-position: center;
+  background-color: #c8e6c9;
+}

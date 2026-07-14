@@ -1,33 +1,29 @@
-import { Component, OnInit, signal } from "@angular/core";
+import { Component, OnInit, signal, ViewChild } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Router, ActivatedRoute } from "@angular/router";
 import { AuthService } from "../../shared/services/auth.service";
 import { Header } from "../../shared/components/header/header";
+import { Scene } from "./components/scene/scene";
+import { KlankBanner } from "./components/klank-banner/klank-banner";
 
 @Component({
   selector: 'app-level1',
   standalone: true,
-  imports: [CommonModule, Header],
+  imports: [CommonModule, Header, Scene, KlankBanner],
   templateUrl: './level1.html',
   styleUrl: './level1.scss'
 })
 export class Level1 implements OnInit {
+  @ViewChild(KlankBanner) klankBanner!: KlankBanner;
+
   items          = signal<any[]>([]);
-  currentKlank   = signal('aa');
-  gevonden       = signal<number[]>([]);
-  feedback       = signal('');
-  feedbackType   = signal('');
-  score          = signal(0);
-  levelKlaar     = signal(false);
   loading        = signal(true);
+  levelKlaar     = signal(false);
   gebruikersnaam = '';
   klas           = '';
   sessionId      = 0;
   sceneImage     = '';
-
-  klanken = ['aa', 'oe', 'ie'];
-  huidigeKlankIndex = 0;
 
   constructor(
     private http: HttpClient,
@@ -45,32 +41,15 @@ export class Level1 implements OnInit {
       }
     });
 
-  const isNieuw = this.route.snapshot.queryParams['nieuw'] === 'true';
-  this.startSessie(!isNieuw);
-  
+    const isNieuw = this.route.snapshot.queryParams['nieuw'] === 'true';
+    this.startSessie(!isNieuw);
   }
 
   startSessie(herstelVoortgang: boolean): void {
     this.http.post<any>('http://localhost:3000/api/progress/session', { level_id: 1 }).subscribe({
       next: (sessie) => {
         this.sessionId = sessie.id;
-
-        if (herstelVoortgang) {
-          this.http.get<any[]>('http://localhost:3000/api/progress/me').subscribe({
-            next: (progressData) => {
-              const mijnSessie = progressData.find(s => s.level_id === 1);
-              if (mijnSessie && mijnSessie.answered > 0) {
-                const aantalKlankenGedaan = Math.floor(Number(mijnSessie.correct) / 4);
-                this.huidigeKlankIndex = Math.min(aantalKlankenGedaan, this.klanken.length - 1);
-                this.score.set(Number(mijnSessie.correct));
-              }
-              this.laadLevel();
-            },
-            error: () => this.laadLevel()
-          });
-        } else {
-          this.laadLevel();
-        }
+        this.laadLevel();
       },
       error: () => this.laadLevel()
     });
@@ -82,71 +61,31 @@ export class Level1 implements OnInit {
         this.items.set(data.items);
         this.sceneImage = data.level.scene_image || '';
         this.loading.set(false);
-        this.toonKlank();
       },
       error: () => this.loading.set(false)
     });
   }
 
-  toonKlank(): void {
-    this.currentKlank.set(this.klanken[this.huidigeKlankIndex]);
-    this.gevonden.set([]);
-    this.feedback.set(`Klik op alle voorwerpen met de klank "${this.klanken[this.huidigeKlankIndex].toUpperCase()}"!`);
-    this.feedbackType.set('info');
+  onItemGeklikt(item: any): void {
+    this.klankBanner.verwerkKlik(item);
   }
 
-  get correctItems(): any[] {
-    return this.items().filter(item => item.klank === this.currentKlank());
-  }
-
-  get alleGevonden(): boolean {
-    return this.correctItems.every(item => this.gevonden().includes(item.id));
-  }
-
-  klikItem(item: any): void {
-    if (this.gevonden().includes(item.id)) return;
-
-    const isGoed = item.klank === this.currentKlank();
-
+  onItemVerwerkt(event: { item: any; isGoed: boolean }): void {
     if (this.sessionId) {
       this.http.post('http://localhost:3000/api/progress/answer', {
         session_id:     this.sessionId,
-        assignment_id:  item.id,
-        is_correct:     isGoed,
-        student_answer: item.name
+        assignment_id:  event.item.id,
+        is_correct:     event.isGoed,
+        student_answer: event.item.name
       }).subscribe();
     }
-
-    if (isGoed) {
-      this.gevonden.set([...this.gevonden(), item.id]);
-      this.score.set(this.score() + 1);
-      this.feedback.set(`✅ Ja! "${item.name}" heeft de klank "${this.currentKlank().toUpperCase()}"!`);
-      this.feedbackType.set('Goed');
-      if (this.alleGevonden) {
-        setTimeout(() => this.volgendeKlank(), 1500);
-      }
-    } else {
-      this.feedback.set(`❌ Nee, "${item.name}" heeft niet de klank "${this.currentKlank().toUpperCase()}".`);
-      this.feedbackType.set('Fout');
-    }
   }
 
-  volgendeKlank(): void {
-    if (this.huidigeKlankIndex < this.klanken.length - 1) {
-      this.huidigeKlankIndex++;
-      this.toonKlank();
-    } else {
-      if (this.sessionId) {
-        this.http.post('http://localhost:3000/api/progress/complete', { session_id: this.sessionId }).subscribe();
-      }
-      this.levelKlaar.set(true);
-      this.feedback.set('🎉 Level voltooid! Goed gedaan!');
-      this.feedbackType.set('Goed');
+  onLevelVoltooid(): void {
+    if (this.sessionId) {
+      this.http.post('http://localhost:3000/api/progress/complete', { session_id: this.sessionId }).subscribe();
     }
-  }
-
-  isGevonden(item: any): boolean {
-    return this.gevonden().includes(item.id);
+    this.levelKlaar.set(true);
   }
 
   terugNaarMenu(): void {

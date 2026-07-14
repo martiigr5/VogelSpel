@@ -1,0 +1,43 @@
+.klank-banner {
+  text-align: center;
+  padding: 1.25rem;
+  background: #fff8f0;
+  border-bottom: 2px solid #F5A623;
+
+  p { margin: 0 0 0.5rem; color: #555; font-size: 0.95rem; }
+}
+
+.klank-tonen {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: #3D1C00;
+  line-height: 1;
+  margin-bottom: 0.75rem;
+}
+
+.voortgang {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.klank-dot {
+  background: #e0e0e0;
+  color: #666;
+  border-radius: 20px;
+  padding: 0.25rem 0.75rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  &.actief { background: #F5A623; color: #3D1C00; }
+}
+
+.feedback-balk {
+  text-align: center;
+  padding: 0.65rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  min-height: 44px;
+  &.goed { color: #2e7d32; background: #e8f5e9; }
+  &.fout { color: #c62828; background: #ffebee; }
+  &.info { color: #1565c0; background: #e3f2fd; }
+}

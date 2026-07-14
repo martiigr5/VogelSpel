@@ -1,1 +1,16 @@
-<p>klank-banner works!</p>
+<div class="klank-banner">
+  <p>Zoek alle voorwerpen met de klank:</p>
+  <div class="klank-tonen">{{ currentKlank.toUpperCase() }}</div>
+  <div class="voortgang">
+    @for (k of klanken; track k) {
+      <span class="klank-dot" [class.actief]="k === currentKlank">{{ k }}</span>
+    }
+  </div>
+</div>
+
+<div class="feedback-balk"
+  [class.goed]="feedbackType === 'Goed'"
+  [class.fout]="feedbackType === 'Fout'"
+  [class.info]="feedbackType === 'info'">
+  {{ feedback }}
+</div>

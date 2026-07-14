@@ -1,1 +1,18 @@
-<p>hotspot works!</p>
+<div class="hotspot"
+    [class.gevonden]="gevonden"
+    [style.left.px]="item.position_x"
+    [style.top.px]="item.position_y"
+    [style.width.px]="item.width"
+    [style.height.px]="item.height"
+    (click)="onKlik()"
+>
+    @if (gevonden) {
+        <span class="item-naam">{{ item.name }}</span>
+    } @else {
+        @if (item.image_file) {
+            <img [src]=" '/assets/' + item.image_file" [alt]="item.name"/>
+        } @else {
+            <span class="item-verborgen">?</span>
+        }
+    }
+</div>
