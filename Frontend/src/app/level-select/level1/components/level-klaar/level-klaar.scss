@@ -1,0 +1,32 @@
+.level-klaar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.level-klaar-card {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+
+  h2 { font-size: 2rem; color: #3D1C00; margin-bottom: 1rem; }
+  p  { color: #555; margin-bottom: 2rem; }
+}
+
+.btn-primary {
+  background: #FFCC99;
+  color: #3D1C00;
+  border: none;
+  border-radius: 8px;
+  padding: 0.85rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: Helvetica, Arial, sans-serif;
+  &:hover { background: #e6951a; }
+}

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-klank-banner',
@@ -10,8 +10,9 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from
 export class KlankBanner implements OnChanges {
   @Input() items: any[] = [];
 
-  @Output() itemVerwerkt  = new EventEmitter<{ item: any; isGoed: boolean }>();
-  @Output() levelVoltooid = new EventEmitter<void>();
+  @Output() itemVerwerkt      = new EventEmitter<{ item: any; isGoed: boolean }>();
+  @Output() levelVoltooid     = new EventEmitter<void>();
+  @Output() gevondenGewijzigd = new EventEmitter<Set<number>>();
 
   klanken           = ['aa', 'oe', 'ie'];
   huidigeKlankIndex = 0;
@@ -19,6 +20,8 @@ export class KlankBanner implements OnChanges {
   gevonden          = new Set<number>();
   feedback          = '';
   feedbackType      = '';
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['items'] && this.items.length > 0) {
@@ -39,6 +42,8 @@ export class KlankBanner implements OnChanges {
     this.gevonden     = new Set<number>();
     this.feedback     = `Klik op alle voorwerpen met de klank "${this.currentKlank.toUpperCase()}"!`;
     this.feedbackType = 'info';
+    this.gevondenGewijzigd.emit(this.gevonden);
+    this.cdr.detectChanges();
   }
 
   verwerkKlik(item: any): void {
@@ -49,7 +54,10 @@ export class KlankBanner implements OnChanges {
     this.itemVerwerkt.emit({ item, isGoed });
 
     if (isGoed) {
-      this.gevonden.add(item.id);
+      const nieuweGevonden = new Set(this.gevonden);
+      nieuweGevonden.add(item.id);
+      this.gevonden = nieuweGevonden;
+      this.gevondenGewijzigd.emit(this.gevonden);
       this.feedback     = `✅ Ja! "${item.name}" heeft de klank "${this.currentKlank.toUpperCase()}"!`;
       this.feedbackType = 'Goed';
 
@@ -60,6 +68,8 @@ export class KlankBanner implements OnChanges {
       this.feedback     = `❌ Nee, "${item.name}" heeft niet de klank "${this.currentKlank.toUpperCase()}".`;
       this.feedbackType = 'Fout';
     }
+
+    this.cdr.detectChanges();
   }
 
   volgendeKlank(): void {
@@ -70,6 +80,7 @@ export class KlankBanner implements OnChanges {
       this.feedback     = '🎉 Level voltooid! Goed gedaan!';
       this.feedbackType = 'Goed';
       this.levelVoltooid.emit();
+      this.cdr.detectChanges();
     }
   }
 

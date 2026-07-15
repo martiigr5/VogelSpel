@@ -16,28 +16,26 @@
       [items]="items()"
       (itemVerwerkt)="onItemVerwerkt($event)"
       (levelVoltooid)="onLevelVoltooid()"
+      (gevondenGewijzigd)="onGevondenGewijzigd($event)"
     />
 
     <app-scene
       [items]="items()"
-      [gevonden]="klankBanner?.gevonden ?? new Set()"
+      [gevonden]="gevonden()"
       [sceneImage]="sceneImage"
       (itemGeklikt)="onItemGeklikt($event)"
     />
 
-    <footer class="game-footer">
-      <button class="footer-btn pauze">Pauze ⏱</button>
-      <button class="footer-btn help">Help ?</button>
-      <button class="footer-btn stoppen" (click)="terugNaarMenu()">Stoppen ⊖</button>
-    </footer>
+    <app-game-footer
+      (gestopt)="terugNaarMenu()"
+    />
   }
 
   @if (levelKlaar()) {
-    <div class="level-klaar-overlay">
-      <div class="level-klaar-card">
-        <h2>🎉 Level voltooid!</h2>
-        <button class="btn-primary" (click)="terugNaarMenu()">Terug naar menu</button>
-      </div>
-    </div>
+    <app-level-klaar
+      [score]="score()"
+      (terugNaarMenu)="terugNaarMenu()"
+    />
+    
   }
 </div>

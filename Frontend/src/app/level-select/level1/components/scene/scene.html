@@ -1,11 +1,11 @@
 <div class="scene-wrapper">
-    <div class="scene" [style.backgroundImage]="sceneImage ? 'url(/assets/' + sceneImage + ')' : ''">
-        @for (item of items; track item.id) {
-            <app-hotspot
-                [item]="item"
-                [gevonden]="isGevonden(item)"
-                (itemGeklikt)="onItemGeklikt($event)"
-            />
-        }
-    </div>
+  <div class="scene" [style.backgroundImage]="sceneImage ? 'url(/assets/' + sceneImage + ')' : ''">
+    @for (item of items; track item.id) {
+      <app-hotspot
+        [item]="item"
+        [gevonden]="isGevonden(item)"
+        (itemGeklikt)="onItemGeklikt($event)"
+      />
+    }
+  </div>
 </div>

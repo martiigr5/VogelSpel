@@ -1,25 +1,29 @@
 import { Component, OnInit, signal, ViewChild } from "@angular/core";
-import { CommonModule } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Router, ActivatedRoute } from "@angular/router";
 import { AuthService } from "../../shared/services/auth.service";
 import { Header } from "../../shared/components/header/header";
 import { Scene } from "./components/scene/scene";
 import { KlankBanner } from "./components/klank-banner/klank-banner";
+import { GameFooter } from "./components/game-footer/game-footer";
+import { LevelKlaar } from "./components/level-klaar/level-klaar";
 
 @Component({
   selector: 'app-level1',
   standalone: true,
-  imports: [CommonModule, Header, Scene, KlankBanner],
+  imports: [Header, Scene, KlankBanner, GameFooter, LevelKlaar],
   templateUrl: './level1.html',
   styleUrl: './level1.scss'
 })
 export class Level1 implements OnInit {
   @ViewChild(KlankBanner) klankBanner!: KlankBanner;
 
-  items          = signal<any[]>([]);
-  loading        = signal(true);
-  levelKlaar     = signal(false);
+  items      = signal<any[]>([]);
+  gevonden   = signal<Set<number>>(new Set());
+  loading    = signal(true);
+  levelKlaar = signal(false);
+  score      = signal(0);
+
   gebruikersnaam = '';
   klas           = '';
   sessionId      = 0;
@@ -70,7 +74,14 @@ export class Level1 implements OnInit {
     this.klankBanner.verwerkKlik(item);
   }
 
+  onGevondenGewijzigd(gevonden: Set<number>): void {
+    this.gevonden.set(new Set(gevonden));
+  }
+
   onItemVerwerkt(event: { item: any; isGoed: boolean }): void {
+    if (event.isGoed) {
+      this.score.set(this.score() + 1);
+    }
     if (this.sessionId) {
       this.http.post('http://localhost:3000/api/progress/answer', {
         session_id:     this.sessionId,
