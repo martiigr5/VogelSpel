@@ -1,7 +1,6 @@
 import { Component, OnInit, signal, ViewChild } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router, ActivatedRoute } from "@angular/router";
-import { AuthService } from "../../shared/services/auth.service";
 import { Header } from "../../shared/components/header/header";
 import { Scene } from "./components/scene/scene";
 import { KlankBanner } from "./components/klank-banner/klank-banner";
@@ -24,27 +23,16 @@ export class Level1 implements OnInit {
   levelKlaar = signal(false);
   score      = signal(0);
 
-  gebruikersnaam = '';
-  klas           = '';
-  sessionId      = 0;
-  sceneImage     = '';
+  sessionId = 0;
+  sceneImage = '';
 
   constructor(
     private http: HttpClient,
     private router: Router,
-    private authService: AuthService,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.authService.currentUser$.subscribe(user => {
-      if (user) {
-        const u = user as any;
-        this.gebruikersnaam = `${u.voornaam} ${u.achternaam}`;
-        this.klas = u.klas || '';
-      }
-    });
-
     const isNieuw = this.route.snapshot.queryParams['nieuw'] === 'true';
     this.startSessie(!isNieuw);
   }
@@ -63,7 +51,7 @@ export class Level1 implements OnInit {
     this.http.get<any>('http://localhost:3000/api/game/levels/1').subscribe({
       next: (data) => {
         this.items.set(data.items);
-        this.sceneImage = data.level.scene_image || '';
+        this.sceneImage = data.level.scene_image
         this.loading.set(false);
       },
       error: () => this.loading.set(false)

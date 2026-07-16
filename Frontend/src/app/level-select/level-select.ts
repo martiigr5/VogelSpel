@@ -17,8 +17,6 @@ export class LevelSelect implements OnInit {
   levels         = signal<any[]>([]);
   loading        = signal(true);
   error          = signal('');
-  gebruikersnaam = '';
-  klas           = '';
 
   constructor(
     private http: HttpClient,
@@ -27,24 +25,16 @@ export class LevelSelect implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.currentUser$.subscribe(user => {
-      if (user) {
-        const u = user as any;
-        this.gebruikersnaam = `${u.voornaam} ${u.achternaam}`;
-        this.klas = u.klas || '';
+    this.http.get<any[]>('http://localhost:3000/api/game/levels').subscribe({
+      next: (levels) => {
+        this.levels.set(levels);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.error.set('Kon levels niet ophalen.');
+        this.loading.set(false);
       }
     });
-
-  this.http.get<any[]>('http://localhost:3000/api/game/levels').subscribe({
-    next: (levels) => {
-      this.levels.set(levels);
-      this.loading.set(false);
-    },
-    error: () => {
-      this.error.set('Kon levels niet ophalen.');
-      this.loading.set(false);
-    }
-  });
   }
 
   getLevelNaam(level: any): string {

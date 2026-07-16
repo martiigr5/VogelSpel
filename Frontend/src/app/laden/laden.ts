@@ -16,9 +16,6 @@ import { SessieKaart } from './components/sessie-kaart/sessie-kaart';
 export class Laden implements OnInit {
   sessies        = signal<any[]>([]);
   loading        = signal(true);
-  gebruikersnaam = '';
-  klas           = '';
-
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -26,14 +23,6 @@ export class Laden implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.currentUser$.subscribe(user => {
-      if (user) {
-        const u = user as any;
-        this.gebruikersnaam = `${u.voornaam} ${u.achternaam}`;
-        this.klas = u.klas || '';
-      }
-    });
-
     this.http.get<any[]>('http://localhost:3000/api/progress/me').subscribe({
       next: (data) => {
         this.sessies.set(data.filter(s => !s.completed));

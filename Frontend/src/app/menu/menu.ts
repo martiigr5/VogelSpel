@@ -12,8 +12,6 @@ import { MenuKnop } from './components/menu-knop/menu-knop';
   styleUrl: './menu.scss'
 })
 export class Menu implements OnInit {
-  gebruikersnaam = '';
-  klas = '';
 
   constructor(
     private router: Router,
@@ -21,13 +19,6 @@ export class Menu implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.currentUser$.subscribe(user => {
-      if (user) {
-        const u = user as any;
-        this.gebruikersnaam = `${u.voornaam} ${u.achternaam}`;
-        this.klas = u.klas || '';
-      }
-    })
   }
 
   newGame(): void {
