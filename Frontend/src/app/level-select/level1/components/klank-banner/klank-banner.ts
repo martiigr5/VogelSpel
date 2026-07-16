@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { InventoryItem } from '../../../../shared/models/game.model';
 
 @Component({
   selector: 'app-klank-banner',
@@ -8,9 +9,9 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, Chang
   styleUrl: './klank-banner.scss',
 })
 export class KlankBanner implements OnChanges {
-  @Input() items: any[] = [];
+  @Input() items: InventoryItem[] = [];
 
-  @Output() itemVerwerkt      = new EventEmitter<{ item: any; isGoed: boolean }>();
+  @Output() itemVerwerkt      = new EventEmitter<{ item: InventoryItem; isGoed: boolean }>();
   @Output() levelVoltooid     = new EventEmitter<void>();
   @Output() gevondenGewijzigd = new EventEmitter<Set<number>>();
 
@@ -29,7 +30,7 @@ export class KlankBanner implements OnChanges {
     }
   }
 
-  get correcteItems(): any[] {
+  get correcteItems(): InventoryItem[] {
     return this.items.filter(item => item.klank === this.currentKlank);
   }
 
@@ -46,7 +47,7 @@ export class KlankBanner implements OnChanges {
     this.cdr.detectChanges();
   }
 
-  verwerkKlik(item: any): void {
+  verwerkKlik(item: InventoryItem): void {
     if (this.gevonden.has(item.id)) return;
 
     const isGoed = item.klank === this.currentKlank;

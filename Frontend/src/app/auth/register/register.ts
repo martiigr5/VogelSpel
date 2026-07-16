@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
+import { RegisterRequest } from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,7 @@ export class Register {
   klas = '';
   email     = '';
   password  = '';
-  role      = 'student';
+  role: 'student' | 'teacher' = 'student';
   error     = '';
   loading   = false;
 
@@ -33,14 +34,22 @@ export class Register {
     this.loading = true;
     this.error   = '';
 
-    this.authService.register(this.voornaam, this.achternaam, this.klas, this.email, this.password, this.role).subscribe({
-      next: () => {
+    const request: RegisterRequest = {
+      voornaam: this.voornaam, 
+      achternaam: this.achternaam,
+      email: this.email,
+      password: this.password, 
+      role: this.role,
+      klas: this.klas
+    };
+    this.authService.register(request).subscribe({
+      next:() => {
         this.loading = false;
-        this.router.navigate(['/login']);
       },
       error: (err) => {
         this.loading = false;
-        this.error = err.error?.error || 'Registratie mislukt. Probeer opnieuw.';
+        this.error = err.error?.message ?? 'Er is een fout opgetreden.';
+        
       }
     });
   }

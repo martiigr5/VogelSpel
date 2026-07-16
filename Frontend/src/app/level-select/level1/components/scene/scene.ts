@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Hotspot } from '../hotspot/hotspot';
+import { InventoryItem } from '../../../../shared/models/game.model';
 
 @Component({
   selector: 'app-scene',
@@ -9,11 +10,11 @@ import { Hotspot } from '../hotspot/hotspot';
   styleUrl: './scene.scss',
 })
 export class Scene {
-  @Input() items:    any[]       = [];
+  @Input() items:    InventoryItem[] = [];
   @Input() gevonden: Set<number> = new Set();
   @Input() sceneImage: string = '';
 
-  @Output() itemGeklikt = new EventEmitter<any>();
+  @Output() itemGeklikt = new EventEmitter<InventoryItem>();
 
 
  

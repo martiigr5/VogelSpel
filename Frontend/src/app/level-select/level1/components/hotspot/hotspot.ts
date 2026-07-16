@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, input } from '@angular/core';
+import { InventoryItem  } from '../../../../shared/models/game.model';
 
 @Component({
   selector: 'app-hotspot',
@@ -8,13 +9,13 @@ import { Component, Input, Output, EventEmitter, input } from '@angular/core';
   styleUrl: './hotspot.scss',
 })
 export class Hotspot {
-  @Input() item: any = null;
+  @Input() item: InventoryItem | null = null;
   @Input() gevonden: boolean = false;
 
-  @Output() itemGeklikt = new EventEmitter<any>();
+  @Output() itemGeklikt = new EventEmitter<InventoryItem>();
 
   onKlik(): void {
-    if (!this.gevonden) {
+    if (!this.gevonden && this.item) {
       this.itemGeklikt.emit(this.item);
     }
   }
