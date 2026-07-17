@@ -24,8 +24,8 @@
       <div class="form-group">
         <label for="role">Ik ben een...</label>
         <select id="role" [(ngModel)]="role">
-          <option value="student">Leerling</option>
-          <option value="teacher">Docent</option>
+          <option [ngValue]="Role.Student">Leerling</option>
+          <option [ngValue]="Role.Teacher">Docent</option>
         </select>
       </div>
     </div>

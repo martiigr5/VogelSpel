@@ -1,9 +1,11 @@
+import { Role } from "./role.enum";
+
 export interface User {
   id:         number;
   voornaam:   string;
   achternaam: string;
   email:      string;
-  role:       'student' | 'teacher';
+  role:       Role;
   klas?:      string;
   klas_id?:   number;
 }
@@ -23,6 +25,6 @@ export interface RegisterRequest {
   achternaam: string;
   email:      string;
   password:   string;
-  role:       'student' | 'teacher';
+  role:       Role;
   klas?:      string;
 }

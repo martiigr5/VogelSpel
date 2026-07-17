@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
 import { RegisterRequest } from '../../shared/models/user.model';
+import { Role } from '../../shared/models/role.enum';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,10 @@ export class Register {
   klas = '';
   email     = '';
   password  = '';
-  role: 'student' | 'teacher' = 'student';
+
+  Role = Role;
+  role: Role = Role.Student;
+
   error     = '';
   loading   = false;
 

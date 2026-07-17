@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
 import { LoginResponse } from '../../shared/models/user.model';
+import { Role } from '../../shared/models/role.enum';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +32,7 @@ export class Login {
     this.authService.login(this.email, this.password).subscribe({
       next: (response: LoginResponse) => {
         this.loading = false;
-        if (response.user.role === 'teacher') {
+        if (response.user.role === Role.Teacher) {
           this.router.navigate(['/dashboard']);
         } else {
           this.router.navigate(['/menu']);
