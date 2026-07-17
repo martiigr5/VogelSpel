@@ -1,37 +1,37 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { Sidebar } from '../sidebar/sidebar';
+import { StudentProgress, LeerlingOverzicht } from '../../shared/models/process.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-leerlingen',
   standalone: true,
-  imports: [CommonModule, FormsModule, Sidebar],
+  imports: [FormsModule, Sidebar],
   templateUrl: './leerlingen.html',
   styleUrl: './leerlingen.scss',
 })
 export class Leerlingen implements OnInit {
-  leerlingen        = signal<any[]>([]);
-  gefilterdeList    = signal<any[]>([]);
-  loading           = signal(true);
-  zoekterm          = '';
+  leerlingen     = signal<LeerlingOverzicht[]>([]);
+  gefilterdeList = signal<LeerlingOverzicht[]>([]);
+  loading        = signal(true);
+  zoekterm       = '';
 
   constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
-    this.http.get<any[]>('http://localhost:3000/api/progress/students').subscribe({
+    this.http.get<StudentProgress[]>('http://localhost:3000/api/progress/students').subscribe({
       next: (data) => {
-        // Groepeer per leerling
-        const map = new Map<number, any>();
+        const map = new Map<number, LeerlingOverzicht>();
+
         for (const row of data) {
           if (!map.has(row.id)) {
             map.set(row.id, {
               id:          row.id,
               naam:        `${row.voornaam || ''} ${row.achternaam || ''}`.trim(),
               email:       row.email,
-              klas:        row.klas_naam || row.klas || '-',
+              klas:        row.klas_naam || '-',
               level:       0,
               voortgang:   0,
               last_active: null,
@@ -39,11 +39,12 @@ export class Leerlingen implements OnInit {
               answered:    0
             });
           }
-          const l = map.get(row.id);
+
+          const l = map.get(row.id)!;
           if (row.level_number) {
-            l.level       = Math.max(l.level, row.level_number);
-            l.correct    += Number(row.correct  || 0);
-            l.answered   += Number(row.answered || 0);
+            l.level    = Math.max(l.level, row.level_number);
+            l.correct  += Number(row.correct  || 0);
+            l.answered += Number(row.answered || 0);
             if (!l.last_active || new Date(row.last_active) > new Date(l.last_active)) {
               l.last_active = row.last_active;
             }
@@ -57,7 +58,6 @@ export class Leerlingen implements OnInit {
 
         this.leerlingen.set(lijst);
         this.gefilterdeList.set(lijst);
-        console.log('lijst:', lijst);
         this.loading.set(false);
       },
       error: () => this.loading.set(false)
@@ -75,7 +75,7 @@ export class Leerlingen implements OnInit {
     );
   }
 
-  formatDatum(datum: string): string {
+  formatDatum(datum: string | null): string {
     if (!datum) return 'Nooit';
     const d    = new Date(datum);
     const nu   = new Date();
@@ -88,6 +88,7 @@ export class Leerlingen implements OnInit {
   }
 
   bekijkLeerling(id: number): void {
+    // later uitbreiden met detailpagina
     this.router.navigate(['/dashboard/leerlingen'], { queryParams: { id } });
-  }
+  } 
 }

@@ -35,9 +35,9 @@
 
         @for (melding of meldingen(); track melding.id) {
           <div class="melding-rij">
-            <div class="melding-avatar">{{ melding.username?.[0]?.toUpperCase() }}</div>
+            <div class="melding-avatar">{{ melding.voornaam[0].toUpperCase() }}</div>
             <div class="melding-info">
-              <span class="melding-naam">{{ melding.username }}</span>
+              <span class="melding-naam">{{ melding.voornaam }} {{ melding.achternaam }}</span>
               <span class="melding-detail">
                 {{ melding.completed ? 'heeft level ' + melding.level_number + ' voltooid' : 'is bezig met level ' + melding.level_number }}
                 — Score: {{ melding.correct || 0 }}/{{ melding.answered || 0 }}

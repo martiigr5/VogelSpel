@@ -31,3 +31,22 @@ export interface StudentProgress {
     answered: number;
     correct: number;
 }
+
+export interface DashboardStats {
+    actieveLeerlingen: number;
+    gemiddeldeVoortgang: number;
+    lopenAchter: number;
+    levelsVoltooid: number;
+}
+
+export interface LeerlingOverzicht {
+  id:          number;
+  naam:        string;
+  email:       string;
+  klas:        string;
+  level:       number;
+  voortgang:   number;
+  last_active: string | null;
+  correct:     number;
+  answered:    number;
+}

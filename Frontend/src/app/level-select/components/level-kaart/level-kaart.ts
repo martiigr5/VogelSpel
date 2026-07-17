@@ -1,4 +1,5 @@
-import { Component, Input, Output, EventEmitter, output } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Level } from '../../../shared/models/game.model';
 
 @Component({
   selector: 'app-level-kaart',
@@ -8,7 +9,7 @@ import { Component, Input, Output, EventEmitter, output } from '@angular/core';
   styleUrl: './level-kaart.scss',
 })
 export class LevelKaart {
-  @Input() level: any = null;
+  @Input() level!: Level;
   @Input() naam: string = '';
   @Input() uitgeschakeld: boolean = false;
 
