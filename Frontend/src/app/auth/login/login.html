@@ -33,7 +33,9 @@
       <a href="#">Wachtwoord vergeten?</a>
     </div>
 
-    <div class="error-message" *ngIf="error">{{ error }}</div>
+    @if (error) {
+      <div class="error-message">{{ error }}</div>
+    }
 
     <button class="btn-primary" (click)="onLogin()" [disabled]="loading">
       {{ loading ? 'Bezig...' : 'Inloggen' }}

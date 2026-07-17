@@ -1,5 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component,Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-header',
@@ -8,24 +9,23 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
-export class Header {
-  @Input() toonTerug = true;
-  @Input() toonUitloggen = false;
-
-  @Output() terugGeklikt = new EventEmitter<void>();
+export class Header implements OnInit {
+  @Output() terugGeklikt     = new EventEmitter<void>();
   @Output() uitloggenGeklikt = new EventEmitter<void>();
 
+  @Input() toonTerug     = true;
+  @Input() toonUitloggen = false;
+
   gebruikersnaam = '';
-  klas = '';
+  klas           = '';
 
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.authService.currentUser$.subscribe(user => {
+    this.authService.currentUser$.subscribe((user: User | null) => {
       if (user) {
-        const u = user as any;
-        this.gebruikersnaam = `${u.voornaam} ${u.achternaam}`;
-        this.klas = u.klas || '';
+        this.gebruikersnaam = `${user.voornaam} ${user.achternaam}`;
+        this.klas = user.klas || '';
       }
     });
   }
@@ -35,6 +35,6 @@ export class Header {
   }
 
   onUitloggen(): void {
-    this.uitloggenGeklikt.emit()
+    this.uitloggenGeklikt.emit();
   }
 }

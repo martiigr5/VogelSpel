@@ -1,31 +1,29 @@
 import { Component, OnInit, signal } from "@angular/core";
-import { CommonModule } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { AuthService } from "../shared/services/auth.service";
 import { Header } from "../shared/components/header/header";
 import { LevelKaart } from "./components/level-kaart/level-kaart";
+import { Level } from "../shared/models/game.model";
 
 @Component({
   selector: 'app-level-select',
   standalone: true,
-  imports: [CommonModule, Header, LevelKaart],
+  imports: [Header, LevelKaart],
   templateUrl: './level-select.html',
   styleUrl: './level-select.scss'
 })
 export class LevelSelect implements OnInit {
-  levels         = signal<any[]>([]);
+  levels         = signal<Level[]>([]);
   loading        = signal(true);
   error          = signal('');
 
   constructor(
     private http: HttpClient,
-    private authService: AuthService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.http.get<any[]>('http://localhost:3000/api/game/levels').subscribe({
+    this.http.get<Level[]>('http://localhost:3000/api/game/levels').subscribe({
       next: (levels) => {
         this.levels.set(levels);
         this.loading.set(false);
@@ -37,8 +35,8 @@ export class LevelSelect implements OnInit {
     });
   }
 
-  getLevelNaam(level: any): string {
-    const namen: any = {
+  getLevelNaam(level: Level): string {
+    const namen: Record<number, string> = {
       1: 'Beginner',
       2: 'Gemiddeld',
       3: 'Moeilijk',
@@ -47,11 +45,11 @@ export class LevelSelect implements OnInit {
     return namen[level.level_number] || level.title;
   }
 
-  isUitgeschakeld(level: any): boolean {
+  isUitgeschakeld(level: Level): boolean {
     return level.level_number > 1;
   }
 
-  onLevelGeklikt(level: any): void {
+  onLevelGeklikt(level: Level): void {
     if (level.level_number === 1) {
       this.router.navigate(['/level-select/level1'], { queryParams:{nieuw: true} });
     }

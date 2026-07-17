@@ -1,29 +1,28 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AuthService } from '../shared/services/auth.service';
 import { Header } from "../shared/components/header/header";
 import { SessieKaart } from './components/sessie-kaart/sessie-kaart';
+import { Session } from '../shared/models/process.model';
 
 @Component({
   selector: 'app-laden',
   standalone: true,
-  imports: [CommonModule, Header, SessieKaart],
+  imports: [Header, SessieKaart],
   templateUrl: './laden.html',
   styleUrl: './laden.scss'
 })
 export class Laden implements OnInit {
-  sessies        = signal<any[]>([]);
-  loading        = signal(true);
+  sessies = signal<Session[]>([]);
+  loading = signal(true);
+
   constructor(
     private http: HttpClient,
-    private router: Router,
-    private authService: AuthService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.http.get<any[]>('http://localhost:3000/api/progress/me').subscribe({
+    this.http.get<Session[]>('http://localhost:3000/api/progress/me').subscribe({
       next: (data) => {
         this.sessies.set(data.filter(s => !s.completed));
         this.loading.set(false);
@@ -32,13 +31,13 @@ export class Laden implements OnInit {
     });
   }
 
-  laadSessie(sessie: any): void {
+  laadSessie(sessie: Session): void {
     if (sessie.level_number === 1) {
       this.router.navigate(['/level-select/level1']);
     }
   }
 
-  verwijderSessie(sessie: any): void {
+  verwijderSessie(sessie: Session): void {
     this.http.delete(`http://localhost:3000/api/progress/session/${sessie.id}`).subscribe({
       next: () => {
         this.sessies.set(this.sessies().filter(s => s.id !== sessie.id));

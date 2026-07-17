@@ -9,7 +9,7 @@ import { InventoryItem  } from '../../../../shared/models/game.model';
   styleUrl: './hotspot.scss',
 })
 export class Hotspot {
-  @Input() item: InventoryItem | null = null;
+  @Input() item!: InventoryItem;
   @Input() gevonden: boolean = false;
 
   @Output() itemGeklikt = new EventEmitter<InventoryItem>();

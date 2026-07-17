@@ -41,7 +41,9 @@
       <input id="password" type="password" [(ngModel)]="password" (keyup.enter)="onRegister()" />
     </div>
 
-    <div class="error-message" *ngIf="error">{{ error }}</div>
+    @if (error) {
+      <div class="error-message">{{ error }}</div>
+    }
 
     <button class="btn-primary" (click)="onRegister()" [disabled]="loading">
       {{ loading ? 'Bezig...' : 'Account aanmaken' }}

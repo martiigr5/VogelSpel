@@ -85,7 +85,7 @@ export class KlankBanner implements OnChanges {
     }
   }
 
-  isGevonden(item: any): boolean {
+  isGevonden(item: InventoryItem): boolean {
     return this.gevonden.has(item.id);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Hotspot } from '../hotspot/hotspot';
 import { InventoryItem } from '../../../../shared/models/game.model';
 
@@ -18,11 +18,11 @@ export class Scene {
 
 
  
-  isGevonden(item: any): boolean {
+  isGevonden(item: InventoryItem): boolean {
     return this.gevonden.has(item.id);
   }
 
-  onItemGeklikt(item: any): void {
+  onItemGeklikt(item: InventoryItem): void {
     this.itemGeklikt.emit(item);
   }
 }

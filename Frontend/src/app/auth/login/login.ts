@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
+import { LoginResponse } from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
@@ -20,7 +20,6 @@ export class Login {
   constructor(private authService: AuthService, private router: Router) {}
 
   onLogin(): void {
-    // valideert aan de frontend kant voordat het naar de backend gestuurd wordt
     if (!this.email || !this.password) {
       this.error = 'Vul je e-mail en wachtwoord in.';
       return;
@@ -29,10 +28,8 @@ export class Login {
     this.loading = true;
     this.error   = '';
 
-    // authService stuurt een POST naar /api/auth/login
-    // subscribe wacht op antwoord van de backend (asychroon)
     this.authService.login(this.email, this.password).subscribe({
-      next: (response) => {
+      next: (response: LoginResponse) => {
         this.loading = false;
         if (response.user.role === 'teacher') {
           this.router.navigate(['/dashboard']);
