@@ -1,27 +1,25 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
 import { LoginResponse } from '../../shared/models/user.model';
+import { LoginForm } from './components/login-form/login-form';
 import { Role } from '../../shared/models/role.enum';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [LoginForm],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
 export class Login {
-  email    = '';
-  password = '';
   error    = '';
   loading  = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  onLogin(): void {
-    if (!this.email || !this.password) {
+  onInloggen(event: { email: string; password: string }): void {
+    if (!event.email || !event.password) {
       this.error = 'Vul je e-mail en wachtwoord in.';
       return;
     }
@@ -29,7 +27,7 @@ export class Login {
     this.loading = true;
     this.error   = '';
 
-    this.authService.login(this.email, this.password).subscribe({
+    this.authService.login(event.email, event.password).subscribe({
       next: (response: LoginResponse) => {
         this.loading = false;
         if (response.user.role === Role.Teacher) {

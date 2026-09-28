@@ -1,0 +1,38 @@
+<div class="form-group">
+    <label for="email">E-mailadres</label>
+    <input
+        id="email"
+        type="email"
+        [(ngModel)]="email"
+        placeholder=""
+        autocomplete="email"
+    />
+</div>
+
+<div class="form-group">
+    <label for="password">Wachtwoord</label>
+    <input
+        id="password"
+        type="password"
+        [(ngModel)]="password"
+        placeholder=""
+        autocomplete="current-password"
+        (keyup.enter)="onLogin()"
+    />
+</div>
+
+<div class="vergeten-link">
+    <a href="#">Wachtwoord vergeten?</a>
+</div>
+
+@if (error) {
+    <div class="error-message"> {{ error }}</div>
+}
+
+<button class="btn-primary" (click)="onLogin()" [disabled]="loading">
+    {{ loading ? 'Bezig...' : 'Inloggen' }}
+</button>
+
+<p class="register-link">
+    Nog geen account? <a routerLink="/register">Registreren</a>
+</p>
