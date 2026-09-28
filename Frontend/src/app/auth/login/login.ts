@@ -3,12 +3,13 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
 import { LoginResponse } from '../../shared/models/user.model';
 import { LoginForm } from './components/login-form/login-form';
+import { LogoFront } from '../components/logo-front/logo-front';
 import { Role } from '../../shared/models/role.enum';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [LoginForm],
+  imports: [LoginForm, LogoFront],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })

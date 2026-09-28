@@ -1,11 +1,7 @@
 <div class="login-wrapper">
+  <app-logo-front/>
   <div class="login-card">
-    <div class="login-title">
-      <h1>
-        <span class="highlight">Het</span><br>Vogelspel
-      </h1>
-    </div>
-    <app-login-form
+     <app-login-form
       [error]="error"
       [loading]="loading"
       (inloggen)="onInloggen($event)"
