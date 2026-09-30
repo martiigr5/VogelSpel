@@ -1,56 +1,11 @@
 <div class="register-wrapper">
   <div class="register-card">
-    <div class="login-title">
-      <h1>
-        <span class="highlight">Het</span><br>Vogelspel
-      </h1>
-    </div>
+    <app-logo-front/>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label for="voornaam">Voornaam</label>
-        <input id="voornaam" type="text" [(ngModel)]="voornaam" />
-      </div>
-      <div class="form-group">
-        <label for="achternaam">Achternaam</label>
-        <input id="achternaam" type="text" [(ngModel)]="achternaam" />
-      </div>
-    </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="klas">Klas</label>
-          <input id="klas" type="text" [(ngModel)]="klas" placeholder="bij. A3" />
-      </div>
-      <div class="form-group">
-        <label for="role">Ik ben een...</label>
-        <select id="role" [(ngModel)]="role">
-          <option [ngValue]="Role.Student">Leerling</option>
-          <option [ngValue]="Role.Teacher">Docent</option>
-        </select>
-      </div>
-    </div>
-    
-
-    <div class="form-group">
-      <label for="email">E-mailadres</label>
-      <input id="email" type="email" [(ngModel)]="email" />
-    </div>
-
-    <div class="form-group">
-      <label for="password">Wachtwoord</label>
-      <input id="password" type="password" [(ngModel)]="password" (keyup.enter)="onRegister()" />
-    </div>
-
-    @if (error) {
-      <div class="error-message">{{ error }}</div>
-    }
-
-    <button class="btn-primary" (click)="onRegister()" [disabled]="loading">
-      {{ loading ? 'Bezig...' : 'Account aanmaken' }}
-    </button>
-
-    <p class="login-link">
-      Al een account? <a routerLink="/login">Inloggen</a>
-    </p>
+    <app-register-form
+      [error]="error"
+      [loading]="loading"
+      (registreren)="onRegister($event)"
+      />
   </div>
 </div>

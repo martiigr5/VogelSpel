@@ -1,35 +1,27 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
 import { RegisterRequest } from '../../shared/models/user.model';
 import { Role } from '../../shared/models/role.enum';
+import { RegisterForm, RegisterFormData } from './components/register-form/register-form';
+import { LogoFront } from '../components/logo-front/logo-front';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [RegisterForm, LogoFront],
   templateUrl: './register.html',
   styleUrl: './register.scss'
 })
 export class Register {
-  voornaam  = '';
-  achternaam = '';
-  klas = '';
-  email     = '';
-  password  = '';
-
-  Role = Role;
-  role: Role = Role.Student;
-
   error     = '';
   loading   = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  onRegister(): void {
+  onRegister(data: RegisterFormData): void {
     // validatie frontend
-    if (!this.voornaam || !this.achternaam || !this.email || !this.password) {
+    if (!data.voornaam || !data.achternaam || !data.email || !data.password) {
       this.error = 'Vul alle velden in.';
       return;
     }
@@ -38,12 +30,12 @@ export class Register {
     this.error   = '';
 
     const request: RegisterRequest = {
-      voornaam: this.voornaam, 
-      achternaam: this.achternaam,
-      email: this.email,
-      password: this.password, 
-      role: this.role,
-      klas: this.klas
+      voornaam: data.voornaam, 
+      achternaam: data.achternaam,
+      email: data.email,
+      password: data.password, 
+      role: data.role,
+      klas: data.klas
     };
     this.authService.register(request).subscribe({
       next:() => {
@@ -52,7 +44,7 @@ export class Register {
       },
       error: (err) => {
         this.loading = false;
-        this.error = err.error?.message ?? 'Er is een fout opgetreden.';
+        this.error = err.error?.message ?? 'Registratie mislukt. Probeer opnieuw.';
         
       }
     });
